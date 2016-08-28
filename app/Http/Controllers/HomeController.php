@@ -49,9 +49,9 @@ class HomeController extends Controller
             ->with('sunday_hours', $sunday_hours);
     }
     
-    public function edit_farmers_market_name()
-    {
-        return view('test');
+
+    public function find() {
+        return view('find');
     }
 
 }
