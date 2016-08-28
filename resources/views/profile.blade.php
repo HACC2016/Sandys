@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+	.no-gutter > [class*='col-'] {
+	    padding-left:0;
+	}
+</style>
 <div class="container">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
@@ -102,6 +107,333 @@
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
+									Farmers Market Hours:
+								</div>	
+								<div class="col-md-6" id="">
+									<ul class="list-group">
+										<form>
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Monday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($monday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($monday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$monday_hours[$i]->start_time_hour}} :
+																	    {{$monday_hours[$i]->start_time_min}}
+																	    @if ($monday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$monday_hours[$i]->end_time_hour}} :  
+																	    {{$monday_hours[$i]->end_time_min}}
+																	    @if ($monday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Tuesday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($tuesday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($tuesday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$tuesday_hours[$i]->start_time_hour}} :
+																	    {{$tuesday_hours[$i]->start_time_min}}
+																	    @if ($tuesday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$tuesday_hours[$i]->end_time_hour}} :  
+																	    {{$tuesday_hours[$i]->end_time_min}}
+																	    @if ($tuesday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>			
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Wednesday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($wednesday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($wednesday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$wednesday_hours[$i]->start_time_hour}} :
+																	    {{$wednesday_hours[$i]->start_time_min}}
+																	    @if ($wednesday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$wednesday_hours[$i]->end_time_hour}} :  
+																	    {{$wednesday_hours[$i]->end_time_min}}
+																	    @if ($wednesday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>											
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Thursday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($thursday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($thursday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$thursday_hours[$i]->start_time_hour}} :
+																	    {{$thursday_hours[$i]->start_time_min}}
+																	    @if ($thursday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$thursday_hours[$i]->end_time_hour}} :  
+																	    {{$thursday_hours[$i]->end_time_min}}
+																	    @if ($thursday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>													
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Friday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($friday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($friday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$friday_hours[$i]->start_time_hour}} :
+																	    {{$friday_hours[$i]->start_time_min}}
+																	    @if ($friday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$friday_hours[$i]->end_time_hour}} :  
+																	    {{$friday_hours[$i]->end_time_min}}
+																	    @if ($friday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>													
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Saturday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($saturday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($saturday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$saturday_hours[$i]->start_time_hour}} :
+																	    {{$saturday_hours[$i]->start_time_min}}
+																	    @if ($saturday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$saturday_hours[$i]->end_time_hour}} :  
+																	    {{$saturday_hours[$i]->end_time_min}}
+																	    @if ($saturday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>												
+											<li class="list-group-item">
+												<div class="row" id="">
+													<div class="col-md-4" id="" style="">
+														Sunday: 
+													</div>
+													<div class="col-md-8" id="" style=" ">
+														@if (count($sunday_hours) == 0) 
+															Not Open
+															<span style="padding-left: 10px">
+																<button class="btn btn-default">
+																	Add A Time Slot
+																</button>
+															</span>
+														@else
+															@for ($i = 0; $i < count($sunday_hours); $i++)
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$sunday_hours[$i]->start_time_hour}} :
+																	    {{$sunday_hours[$i]->start_time_min}}
+																	    @if ($sunday_hours[$i]->start_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+																<div class="row no-gutter" id="">
+																	<div class="col-md-6" id="" style="">
+																		Start Time:
+																	</div>
+																	<div class="col-md-6" id="">
+																	    {{$sunday_hours[$i]->end_time_hour}} :  
+																	    {{$sunday_hours[$i]->end_time_min}}
+																	    @if ($sunday_hours[$i]->end_time_period == 1) AM
+																	    @else PM
+																	    @endif
+																	</div>
+																</div>
+															@endfor
+														@endif
+													</div>
+												</div>
+											</li>		
+											
+										
+									
+										</form>
+									</ul>					
+								</div>	
+								<div class="col-md-3" style="text-align: left;" id="">
+									<a href="{{url('/edit/hours')}}">edit</a>
+								</div>	
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row" id="">
 								<div class="col-md-4" style="text-align: right;" id="">
 									<a href="{{url('/change_password')}}">Change Password</a>
 								</div>	
@@ -114,19 +446,3 @@
 	</div>
 </div>
 @endsection
-
-Farmers Market Name*
- Day(s) of week* (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
- Start and end time*
- Street Address*
- City*
- Zip code*
- Island*
-Additional Location information
- Website
- Organizer Contact Name*
- Organizer Phone Number*
- Organizer Email*
- Organizer login name*
- Organizer password*
- Date modified (mm/dd/ccyy)

@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('zipcode');
             $table->string('organizer_name');
             $table->string('organizer_phone_number');
-            $table->string('email')->unique();
             $table->string('website');
+            $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -35,6 +35,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::dropIfExists('users');
     }
 }

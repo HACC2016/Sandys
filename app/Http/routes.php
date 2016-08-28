@@ -29,6 +29,7 @@ Route::get('edit/zipcode', 'EditFarmersMarketController@zipcode');
 Route::get('edit/organizer_name', 'EditFarmersMarketController@organizer_name');
 Route::get('edit/organizer_phone_number', 'EditFarmersMarketController@organizer_phone_number');
 Route::get('edit/website', 'EditFarmersMarketController@website');
+Route::get('edit/hours', 'EditFarmersMarketController@hours');
 
 Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'HomeController@profile');
