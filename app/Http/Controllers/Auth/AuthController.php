@@ -50,6 +50,9 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'farmers_market_name' => 'required|max:255',
+            'street_address' => 'required',
+            'city' => 'required',
+            'zipcode' => 'required',
             'organizer_name' => 'required',
             'organizer_phone_number' => 'required|regex:/[123456789]\d{6}/',
             'email' => 'required|email|max:255|unique:users',
@@ -67,10 +70,15 @@ class AuthController extends Controller
     {
         return User::create([
             'farmers_market_name' => $data['farmers_market_name'],
+            'street_address' => $data['street_address'],
+            'city' => $data['city'],
+            'zipcode' => $data['zipcode'],
             'organizer_name' => $data['organizer_name'],
             'organizer_phone_number' => $data['organizer_phone_number'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function register_farmers_market() { return view('auth.register'); }
 }

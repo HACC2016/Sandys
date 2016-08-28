@@ -5,12 +5,14 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+                <div class="panel-heading">
+                Register Farmers Market  <a style="float:right" href="{{url('/register/user')}}"> Opps I Want To Register As A User</a>
+                </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('farmers_market_name') ? ' has-error' : '' }}">
                             <label for="farmers_market_name" class="col-md-4 control-label">Name Of Farmers Market</label>
 
                             <div class="col-md-6">
@@ -29,7 +31,64 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('street_address') ? ' has-error' : '' }}">
+                            <label for="farmers_market_name" class="col-md-4 control-label">Street Address Of Farmers Market</label>
+
+                            <div class="col-md-6">
+                                <input 
+                                id="street_address" 
+                                type="text" 
+                                class="form-control" 
+                                name="street_address" 
+                                value="{{ old('street_address') }}">
+
+                                @if ($errors->has('street_address'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('street_address') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
+                            <label for="city" class="col-md-4 control-label">City</label>
+
+                            <div class="col-md-6">
+                                <input 
+                                id="city" 
+                                type="text" 
+                                class="form-control" 
+                                name="city" 
+                                value="{{ old('city') }}">
+
+                                @if ($errors->has('city'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('city') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <div class="form-group{{ $errors->has('zipcode') ? ' has-error' : '' }}">
+                            <label for="zipcode" class="col-md-4 control-label">ZipCode</label>
+
+                            <div class="col-md-6">
+                                <input 
+                                id="zipcode" 
+                                type="text" 
+                                class="form-control" 
+                                name="zipcode" 
+                                value="{{ old('zipcode') }}">
+
+                                @if ($errors->has('zipcode'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('zipcode') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('organizer_name') ? ' has-error' : '' }}">
                             <label for="organizer_name" class="col-md-4 control-label">Organizer Name</label>
 
                             <div class="col-md-6">
@@ -48,7 +107,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('organizer_phone_number') ? ' has-error' : '' }}">
                             <label for="organizer_phone_number" class="col-md-4 control-label">Organizer Phone Number</label>
 
                             <div class="col-md-6">

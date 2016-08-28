@@ -31,4 +31,10 @@ class HomeController extends Controller
     {
         return view('profile');
     }
+    
+    public function edit_farmers_market_name()
+    {
+        return view('test');
+    }
+
 }
