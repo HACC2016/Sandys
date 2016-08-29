@@ -1,0 +1,67 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class Migrations extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+        Schema::create('farmers_markets', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('farmers_market_name');
+            $table->string('street_address');
+            $table->string('city');
+            $table->string('zipcode');
+            $table->string('organizer_name');
+            $table->string('organizer_phone_number');
+            $table->string('website');
+            $table->timestamps();
+        });
+        Schema::create('farmers_market_hours', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('farmers_market_id')->unsigned();
+            $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
+            $table->integer('day_of_week');
+            $table->integer('start_time_hour');
+            $table->integer('start_time_min');
+            $table->integer('start_time_period');
+            $table->integer('end_time_hour');
+            $table->integer('end_time_min');
+            $table->integer('end_time_period');
+            $table->timestamps();
+        });
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token')->index();
+            $table->timestamp('created_at');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('farmers_market_hours');
+        Schema::drop('farmers_markets');
+        Schema::drop('password_resets');
+        Schema::drop('users');
+    }
+}

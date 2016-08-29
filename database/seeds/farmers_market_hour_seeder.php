@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class farmers_market_hour_seeder extends Seeder
 {
@@ -12,7 +13,7 @@ class farmers_market_hour_seeder extends Seeder
     public function run()
     {
         DB::table('farmers_market_hours')->insert([
-            'user_id' => '1',
+            'farmers_market_id' => '1',
             'day_of_week' => '1',
             'start_time_hour' => '6',
             'start_time_min' => '15',

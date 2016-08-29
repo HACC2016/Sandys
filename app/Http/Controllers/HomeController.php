@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Farmers_Market_Hour;
+use App\Farmers_Market;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;

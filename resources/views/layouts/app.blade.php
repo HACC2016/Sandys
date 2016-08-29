@@ -67,7 +67,7 @@
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->farmers_market_name }} <span class="caret"></span>
+                                {{ App\Farmers_Market::findByUserId(Auth::user()->id)[0]->farmers_market_name }} <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
