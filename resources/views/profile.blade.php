@@ -20,7 +20,7 @@
 									Farmers Market Name:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->farmers_market_name}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->farmers_market_name }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/farmers_market_name')}}">edit</a>
@@ -33,7 +33,7 @@
 									Street Address:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->street_address}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->street_address }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/street_address')}}">edit</a>
@@ -46,7 +46,7 @@
 									City:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->city}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->city}}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/city')}}">edit</a>
@@ -59,7 +59,7 @@
 									Zipcode:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->zipcode}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->zipcode }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/zipcode')}}">edit</a>
@@ -72,7 +72,7 @@
 									Organizers Name:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->organizer_name}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->organizer_name }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/organizer_name')}}">edit</a>
@@ -85,7 +85,7 @@
 									Organizers Phone Number:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->organizer_phone_number}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->organizer_phone_number }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/organizer_phone_number')}}">edit</a>
@@ -98,7 +98,7 @@
 								Website:
 								</div>	
 								<div class="col-md-5" id="">
-									{{Auth::user()->website}}
+									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->website }}
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
 									<a href="{{url('/edit/website')}}">edit</a>

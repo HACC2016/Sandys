@@ -33,13 +33,13 @@ class HomeController extends Controller
 
     public function profile()
     {
-        $monday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '1')->get();
-        $tuesday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '2')->get();
-        $wednesday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '3')->get();
-        $thursday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '4')->get();
-        $friday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '5')->get();
-        $saturday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '6')->get();
-        $sunday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '7')->get();
+        $monday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 1);
+        $tuesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 2);
+        $wednesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 3);
+        $thursday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 4);
+        $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 5);
+        $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 6);
+        $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 7);
         return view('profile')
             ->with('monday_hours', $monday_hours)
             ->with('tuesday_hours', $tuesday_hours)

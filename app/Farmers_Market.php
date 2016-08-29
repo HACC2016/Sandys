@@ -8,7 +8,7 @@ class Farmers_Market extends Model
 {
 	protected $table = 'farmers_markets';
 
-	public static function findByUserId($id) {
-		return Farmers_Market::where('user_id', $id)->get();
+	public static function findFarmersMarketByUserId($id) {
+		return Farmers_Market::where('user_id', $id)->first();
 	}
 }
