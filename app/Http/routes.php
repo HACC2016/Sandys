@@ -37,5 +37,5 @@ Route::get('/find', 'HomeController@find');
 
 //API
 Route::get('api/farmers_markets', function() {
-	return App\User::all();
+	return App\Farmers_Market::all();
 });
