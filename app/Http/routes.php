@@ -23,9 +23,7 @@ Route::get('register/user', 'Auth\AuthController@register_farmers_market');
 Route::post('register', 'Auth\AuthController@register');
 
 Route::get('edit/farmers_market_name', 'EditFarmersMarketController@farmers_market_name');
-Route::get('edit/street_address', 'EditFarmersMarketController@street_address');
-Route::get('edit/city', 'EditFarmersMarketController@city');
-Route::get('edit/zipcode', 'EditFarmersMarketController@zipcode');
+Route::get('edit/address', 'EditFarmersMarketController@address');
 Route::get('edit/organizer_name', 'EditFarmersMarketController@organizer_name');
 Route::get('edit/organizer_phone_number', 'EditFarmersMarketController@organizer_phone_number');
 Route::get('edit/website', 'EditFarmersMarketController@website');

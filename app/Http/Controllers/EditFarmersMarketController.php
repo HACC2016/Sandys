@@ -18,17 +18,9 @@ class EditFarmersMarketController extends Controller
     {
         return view('edit.farmers_market_name');
     }
-    public function street_address()
+    public function address()
     {
-        return view('edit.street_address');
-    }
-    public function city()
-    {
-        return view('edit.city');
-    }
-    public function zipcode()
-    {
-        return view('edit.zipcode');
+        return view('edit.address');
     }
     public function organizer_name()
     {

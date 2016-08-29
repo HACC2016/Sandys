@@ -30,13 +30,44 @@
 						<li class="list-group-item">
 							<div class="row" id="">
 								<div class="col-md-4" style="text-align: right;" id="">
-									Street Address:
+									Address:
 								</div>	
 								<div class="col-md-5" id="">
-									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->street_address }}
+									<ul class="list-group">
+										<li class="list-group-item">
+											<div class="row">
+												<div class="col-md-4" id="">
+													Street Addres:					
+												</div>
+												<div class="col-md-8" id="">
+													{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->street_address}}
+												</div>
+											</div>
+										</li>
+										<li class="list-group-item">
+											<div class="row">
+												<div class="col-md-4" id="">
+													City:
+												</div>
+												<div class="col-md-8" id="">
+													{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->city}}
+												</div>
+											</div>
+										</li>
+										<li class="list-group-item">
+											<div class="row">
+												<div class="col-md-4" id="">
+													Zipcode:
+												</div>
+												<div class="col-md-8" id="">
+													{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->zipcode}}
+												</div>
+											</div>
+										</li>
+									</ul>
 								</div>	
 								<div class="col-md-3" style="text-align: left;" id="">
-									<a href="{{url('/edit/street_address')}}">edit</a>
+									<a href="{{url('/edit/address')}}">edit</a>
 								</div>	
 							</div>
 						</li>
