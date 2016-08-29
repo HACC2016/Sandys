@@ -34,3 +34,8 @@ Route::get('edit/hours', 'EditFarmersMarketController@hours');
 Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'HomeController@profile');
 Route::get('/find', 'HomeController@find');
+
+//API
+Route::get('api/farmers_markets', function() {
+	return App\User::all();
+});
