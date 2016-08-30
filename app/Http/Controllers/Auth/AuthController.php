@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Farmers_Market;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -53,6 +54,10 @@ class AuthController extends Controller
             'street_address' => 'required',
             'city' => 'required',
             'zipcode' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+            'state' => 'required',
+            'country' => 'required',
             'organizer_name' => 'required',
             'organizer_phone_number' => 'required|regex:/[123456789]\d{6}/',
             'email' => 'required|email|max:255|unique:users',
@@ -68,16 +73,24 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+        Farmers_Market::create([
             'farmers_market_name' => $data['farmers_market_name'],
             'street_address' => $data['street_address'],
             'city' => $data['city'],
             'zipcode' => $data['zipcode'],
+            'lat' => $data['lat'],
+            'lng' => $data['lng'],
+            'state' => $data['state'],
+            'country' => $data['country'],
             'organizer_name' => $data['organizer_name'],
             'organizer_phone_number' => $data['organizer_phone_number'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'user_id' => $user->id
         ]);
+        return $user;
     }
 
     public function register_farmers_market() { return view('auth.register'); }

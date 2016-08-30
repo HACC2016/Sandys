@@ -28,16 +28,16 @@
 							</div>
 						</li>
 						<li class="list-group-item">
-							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
-									Address:
+							<div class="row" id="address">
+								<div class="col-md-3" style="text-align: right;" id="">
+									Street Address:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									<ul class="list-group">
 										<li class="list-group-item">
 											<div class="row">
 												<div class="col-md-4" id="">
-													Street Addres:					
+													Street Address:
 												</div>
 												<div class="col-md-8" id="">
 													{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->street_address}}
@@ -64,11 +64,16 @@
 												</div>
 											</div>
 										</li>
+										<li class="list-group-item">
+											<div id="map" style="width: 100%; height: 480px;"></div>
+										</li>
+										<input readonly="readonly" type="hidden" value="{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->lat}}" class="form-control" id="" v-model="lat" name="lat"/>
+										<input readonly="readonly" type="hidden" value="{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->lng}}" class="form-control" id="" v-model="lng" name="lng"/>
 									</ul>
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2">
 									<a href="{{url('/edit/address')}}">edit</a>
-								</div>	
+								</div>
 							</div>
 						</li>
 						<li class="list-group-item">
@@ -476,4 +481,9 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/0.9.3/vue-resource.min.js"></script>
+<script src="/js/profile.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSlEzpoQVs5JupSo1ed2Wc9sLCvCsrppI&callback=initialize"> </script>
 @endsection

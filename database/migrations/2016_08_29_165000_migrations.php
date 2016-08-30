@@ -27,6 +27,10 @@ class Migrations extends Migration
             $table->string('street_address');
             $table->string('city');
             $table->string('zipcode');
+            $table->string('lat');
+            $table->string('lng');
+            $table->string('state');
+            $table->string('country');
             $table->string('organizer_name');
             $table->string('organizer_phone_number');
             $table->string('website');

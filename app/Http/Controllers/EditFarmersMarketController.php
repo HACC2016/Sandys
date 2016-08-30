@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Farmers_Market_Hour;
+use App\Farmers_Market;
 class EditFarmersMarketController extends Controller
 {
     public function __construct()
@@ -37,6 +38,32 @@ class EditFarmersMarketController extends Controller
     public function password()
     {
         return view('edit.password');
+    }
+    public function postAddress(Request $request)
+    {
+        echo $request->input('street_address');
+        echo "<br>";
+        echo $request->input('city');
+        echo "<br>";
+        echo $request->input('zipcode');
+        echo "<br>";
+        echo $request->input('lat');
+        echo "<br>";
+        echo $request->input('lng');
+        echo "<br>";
+        echo $request->input('state');
+        echo "<br>";
+        echo $request->input('country');
+        $farmers_market = Farmers_Market::findFarmersMarketByUserId($this->user->id);
+        $farmers_market->street_address = $request->input('street_address');
+        $farmers_market->city = $request->input('city');
+        $farmers_market->zipcode = $request->input('zipcode');
+        $farmers_market->lat = $request->input('lat');
+        $farmers_market->lng = $request->input('lng');
+        $farmers_market->country = $request->input('country');
+        $farmers_market->state = $request->input('state');
+        $farmers_market->save();
+        return redirect('/edit/address');
     }
     public function hours()
     {

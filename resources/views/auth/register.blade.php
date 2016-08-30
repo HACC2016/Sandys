@@ -9,7 +9,7 @@
                 Register Farmers Market  <a style="float:right" href="{{url('/register/user')}}"> Opps I Want To Register As A User</a>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}" id="register">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('farmers_market_name') ? ' has-error' : '' }}">
@@ -36,10 +36,12 @@
 
                             <div class="col-md-6">
                                 <input 
+                                @change="streetAddressChanged"
                                 id="street_address" 
                                 type="text" 
                                 class="form-control" 
                                 name="street_address" 
+                                v-model="street_address"
                                 value="{{ old('street_address') }}">
 
                                 @if ($errors->has('street_address'))
@@ -49,16 +51,24 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-6">
+                                <div id="map" style="width: 100%; height: 300px;"></div>
+                            </div>
+                        </div>
 
                         <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
                             <label for="city" class="col-md-4 control-label">City</label>
 
                             <div class="col-md-6">
                                 <input 
+                                readonly = "readonly"
                                 id="city" 
                                 type="text" 
                                 class="form-control" 
                                 name="city" 
+                                v-model="city"
                                 value="{{ old('city') }}">
 
                                 @if ($errors->has('city'))
@@ -74,10 +84,12 @@
 
                             <div class="col-md-6">
                                 <input 
+                                readonly ="readonly"
                                 id="zipcode" 
                                 type="text" 
                                 class="form-control" 
                                 name="zipcode" 
+                                v-model="zipcode"
                                 value="{{ old('zipcode') }}">
 
                                 @if ($errors->has('zipcode'))
@@ -87,6 +99,10 @@
                                 @endif
                             </div>
                         </div>
+                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="lat" name="lat"/>
+                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="lng" name="lng"/>
+                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="state" name="state"/>
+                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="country" name="country"/>
 
                         <div class="form-group{{ $errors->has('organizer_name') ? ' has-error' : '' }}">
                             <label for="organizer_name" class="col-md-4 control-label">Organizer Name</label>
@@ -180,4 +196,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/0.9.3/vue-resource.min.js"></script>
+<script src="/js/register.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSlEzpoQVs5JupSo1ed2Wc9sLCvCsrppI&callback=initialize"> </script>
 @endsection
