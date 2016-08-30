@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(user_seeder::class);
         $this->call(farmers_markets::class);
         $this->call(farmers_market_hour_seeder::class);
+        $this->call(farmer_market_review_seeder::class);
     }
 }

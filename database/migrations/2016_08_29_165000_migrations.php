@@ -16,6 +16,7 @@ class Migrations extends Migration
             $table->increments('id');
             $table->string('email')->unique();
             $table->string('password');
+            $table->integer('type_account');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -30,6 +31,7 @@ class Migrations extends Migration
             $table->string('lat');
             $table->string('lng');
             $table->string('state');
+            $table->string('county');
             $table->string('country');
             $table->string('organizer_name');
             $table->string('organizer_phone_number');
@@ -54,6 +56,16 @@ class Migrations extends Migration
             $table->string('token')->index();
             $table->timestamp('created_at');
         });
+        Schema::create('farmers_market_reviews', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('farmers_market_id')->unsigned();
+            $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
+            $table->string('review');
+            $table->integer('rating');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -64,6 +76,7 @@ class Migrations extends Migration
     public function down()
     {
         Schema::drop('farmers_market_hours');
+        Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');
         Schema::drop('users');

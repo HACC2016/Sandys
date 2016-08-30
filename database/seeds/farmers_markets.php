@@ -20,6 +20,7 @@ class farmers_markets extends Seeder
             'zipcode' => '96720',
             'lat' => '19.676747',
             'lng' => '-155.099217',
+            'county' => 'Hawaii County',
             'state' => 'Hawaii',
             'country' => 'United States',
             'zipcode' => '96720',

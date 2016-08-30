@@ -40,7 +40,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    Sandy's Farmers Market
                 </a>
             </div>
 
@@ -67,7 +67,12 @@
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->farmers_market_name }} <span class="caret"></span>
+                                @if (Auth::user()->id == 1)
+                                    {{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->farmers_market_name }} 
+                                @elseif (Auth::user()->id == 2)
+                                    {{Auth::user()->email}}
+                                @endif
+                                <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">

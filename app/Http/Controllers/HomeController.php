@@ -33,26 +33,25 @@ class HomeController extends Controller
 
     public function profile()
     {
-        $monday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 1);
-        $tuesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 2);
-        $wednesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 3);
-        $thursday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 4);
-        $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 5);
-        $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 6);
-        $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 7);
-        return view('profile')
-            ->with('monday_hours', $monday_hours)
-            ->with('tuesday_hours', $tuesday_hours)
-            ->with('wednesday_hours', $wednesday_hours)
-            ->with('thursday_hours', $thursday_hours)
-            ->with('friday_hours', $friday_hours)
-            ->with('saturday_hours', $saturday_hours)
-            ->with('sunday_hours', $sunday_hours);
+        if(Auth::user()->type_account == 1) {
+            $monday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 1);
+            $tuesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 2);
+            $wednesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 3);
+            $thursday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 4);
+            $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 5);
+            $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 6);
+            $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 7);
+            return view('profile')
+                ->with('monday_hours', $monday_hours)
+                ->with('tuesday_hours', $tuesday_hours)
+                ->with('wednesday_hours', $wednesday_hours)
+                ->with('thursday_hours', $thursday_hours)
+                ->with('friday_hours', $friday_hours)
+                ->with('saturday_hours', $saturday_hours)
+                ->with('sunday_hours', $sunday_hours);
+        }
+        elseif(Auth::user()->type_account == 2) {
+            return view('profile.user');
+        }
     }
-    
-
-    public function find() {
-        return view('find');
-    }
-
 }

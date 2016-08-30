@@ -53,6 +53,8 @@ var vue = new Vue({
 						vue.country = vue.getCountry(results[0].address_components);
 						vue.lat = results[0].geometry.location.lat();
 						vue.lng = results[0].geometry.location.lng();
+						vue.lng = results[0].geometry.location.lng();
+						vue.county = vue.getCounty(results[0].address_components);
 						vue.zipcode = vue.getPostalCode(results[0].address_components);
 						vue.city = vue.getCity(results[0].address_components);
 						vue.street_address_changed = false;
@@ -62,6 +64,9 @@ var vue = new Vue({
 					}
 				}
 			)
+		},
+		getCounty: function(address_components) {
+			return this.findAddressComponent(address_components, 'administrative_area_level_2');
 		},
 		getCountry: function(address_components) {
 			return this.findAddressComponent(address_components, 'country');

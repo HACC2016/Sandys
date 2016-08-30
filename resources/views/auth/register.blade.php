@@ -99,10 +99,11 @@
                                 @endif
                             </div>
                         </div>
-                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="lat" name="lat"/>
-                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="lng" name="lng"/>
-                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="state" name="state"/>
-                        <input readonly="readonly" type="hidden" value="" class="form-control" id="" v-model="country" name="country"/>
+                        <input readonly="readonly" type="hidden" value="{{ old('lat') }}" class="form-control" id="" v-model="lat" name="lat"/>
+                        <input readonly="readonly" type="hidden" value="{{ old('lng') }}" class="form-control" id="" v-model="lng" name="lng"/>
+                        <input readonly="readonly" type="hidden" value="{{ old('state') }}" class="form-control" id="" v-model="state" name="state"/>
+                        <input readonly="readonly" type="hidden" value="{{ old('country') }}" class="form-control" id="" v-model="country" name="country"/>
+                        <input readonly="readonly" type="hidden" value="{{ old('county') }}" class="form-control" id="" v-model="county" name="county"/>
 
                         <div class="form-group{{ $errors->has('organizer_name') ? ' has-error' : '' }}">
                             <label for="organizer_name" class="col-md-4 control-label">Organizer Name</label>
@@ -182,6 +183,14 @@
                                 @endif
                             </div>
                         </div>
+                        <input 
+                        readonly ="readonly"
+                        id="type_account" 
+                        type="hidden" 
+                        class="form-control" 
+                        name="type_account" 
+                        v-model="type_account"
+                        value="1">
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

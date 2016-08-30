@@ -49,20 +49,30 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'farmers_market_name' => 'required|max:255',
-            'street_address' => 'required',
-            'city' => 'required',
-            'zipcode' => 'required',
-            'lat' => 'required',
-            'lng' => 'required',
-            'state' => 'required',
-            'country' => 'required',
-            'organizer_name' => 'required',
-            'organizer_phone_number' => 'required|regex:/[123456789]\d{6}/',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        if($data['type_account'] == 1) {
+            return Validator::make($data, [
+                'farmers_market_name' => 'required|max:255',
+                'street_address' => 'required',
+                'city' => 'required',
+                'zipcode' => 'required',
+                'lat' => 'required',
+                'lng' => 'required',
+                'state' => 'required',
+                'country' => 'required',
+                'county' => 'required',
+                'organizer_name' => 'required',
+                'organizer_phone_number' => 'required|regex:/[123456789]\d{6}/',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+            ]);
+        }
+        elseif($data['type_account'] == 2) {
+            return Validator::make($data, [
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+            ]);
+
+        }
     }
 
     /**
@@ -76,22 +86,29 @@ class AuthController extends Controller
         $user = User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'type_account' => $data['type_account'],
         ]);
-        Farmers_Market::create([
-            'farmers_market_name' => $data['farmers_market_name'],
-            'street_address' => $data['street_address'],
-            'city' => $data['city'],
-            'zipcode' => $data['zipcode'],
-            'lat' => $data['lat'],
-            'lng' => $data['lng'],
-            'state' => $data['state'],
-            'country' => $data['country'],
-            'organizer_name' => $data['organizer_name'],
-            'organizer_phone_number' => $data['organizer_phone_number'],
-            'user_id' => $user->id
-        ]);
+        if($data['type_account'] == 1) {
+            Farmers_Market::create([
+                'farmers_market_name' => $data['farmers_market_name'],
+                'street_address' => $data['street_address'],
+                'city' => $data['city'],
+                'zipcode' => $data['zipcode'],
+                'lat' => $data['lat'],
+                'lng' => $data['lng'],
+                'state' => $data['state'],
+                'country' => $data['country'],
+                'county' => $data['county'],
+                'organizer_name' => $data['organizer_name'],
+                'organizer_phone_number' => $data['organizer_phone_number'],
+                'user_id' => $user->id
+            ]);
+        }
+        elseif($data['type_account'] == 2) {
+        }
         return $user;
     }
 
     public function register_farmers_market() { return view('auth.register'); }
+    public function register_user() { return view('auth.register_user'); }
 }

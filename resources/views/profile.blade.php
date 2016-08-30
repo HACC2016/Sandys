@@ -16,13 +16,13 @@
 					<ul class="list-group">
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 									Farmers Market Name:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->farmers_market_name }}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/farmers_market_name')}}">edit</a>
 								</div>	
 							</div>
@@ -78,65 +78,65 @@
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 									City:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->city}}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/city')}}">edit</a>
 								</div>	
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 									Zipcode:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->zipcode }}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/zipcode')}}">edit</a>
 								</div>	
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 									Organizers Name:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->organizer_name }}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/organizer_name')}}">edit</a>
 								</div>	
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 									Organizers Phone Number:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->organizer_phone_number }}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/organizer_phone_number')}}">edit</a>
 								</div>	
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
+								<div class="col-md-3" style="text-align: right;" id="">
 								Website:
 								</div>	
-								<div class="col-md-5" id="">
+								<div class="col-md-7" id="">
 									{{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->website }}
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/website')}}">edit</a>
 								</div>	
 							</div>
@@ -463,15 +463,15 @@
 										</form>
 									</ul>					
 								</div>	
-								<div class="col-md-3" style="text-align: left;" id="">
+								<div class="col-md-2" style="text-align: left;" id="">
 									<a href="{{url('/edit/hours')}}">edit</a>
 								</div>	
 							</div>
 						</li>
 						<li class="list-group-item">
 							<div class="row" id="">
-								<div class="col-md-4" style="text-align: right;" id="">
-									<a href="{{url('/change_password')}}">Change Password</a>
+								<div class="col-md-3" id=""> </div>
+								<div class="col-md-7" style="text-align: " id=""> <a href="{{url('/change_password')}}">Change Password</a>
 								</div>	
 							</div>
 						</li>
