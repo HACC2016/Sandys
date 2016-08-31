@@ -33,6 +33,7 @@ Route::get('edit/hours', 'EditFarmersMarketController@hours');
 
 Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'HomeController@profile');
+Route::get('/profile/vendors_information', 'HomeController@profile_vendors_information');
 
 
 Route::get('/find', 'GuestController@find');

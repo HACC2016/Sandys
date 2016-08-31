@@ -57,4 +57,8 @@ class HomeController extends Controller
             return view('profile.vendor');
         }
     }
+    public function profile_vendors_information() {
+        return view('profile.vendors_information');
+
+    }
 }
