@@ -20,6 +20,7 @@ Route::auth();
 Route::get('register/farmers_market', 'Auth\AuthController@register_farmers_market');
 Route::post('register', 'Auth\AuthController@register');
 Route::get('register/user', 'Auth\AuthController@register_user');
+Route::get('register/vendor', 'Auth\AuthController@register_vendor');
 Route::post('register', 'Auth\AuthController@register');
 
 Route::get('edit/farmers_market_name', 'EditFarmersMarketController@farmers_market_name');

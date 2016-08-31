@@ -62,15 +62,18 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/register/farmers_market') }}">Farmers Market</a></li>
                                 <li><a href="{{ url('/register/user') }}">User</a></li>
+                                <li><a href="{{ url('/register/vendor') }}">Vendor</a></li>
                             </ul>
                         </li>
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                @if (Auth::user()->id == 1)
+                                @if (Auth::user()->type_account == 1)
                                     {{ App\Farmers_Market::findFarmersMarketByUserId(Auth::user()->id)->farmers_market_name }} 
-                                @elseif (Auth::user()->id == 2)
+                                @elseif (Auth::user()->type_account == 2)
                                     {{Auth::user()->email}}
+                                @elseif (Auth::user()->type_account == 3)
+                                    {{ App\Vendor::findVendorMarketByUserId(Auth::user()->id)->vendor_name }} 
                                 @endif
                                 <span class="caret"></span>
                             </a>

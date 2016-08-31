@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Farmers_Market;
+use App\Vendor;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -66,8 +67,11 @@ class AuthController extends Controller
                 'password' => 'required|min:6|confirmed',
             ]);
         }
-        elseif($data['type_account'] == 2) {
+        elseif($data['type_account'] == 3) {
             return Validator::make($data, [
+                'vendor_name' => 'required',
+                'vendor_owner_name' => 'required',
+                'vendor_owner_phone' => 'required',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|min:6|confirmed',
             ]);
@@ -106,9 +110,18 @@ class AuthController extends Controller
         }
         elseif($data['type_account'] == 2) {
         }
+        elseif($data['type_account'] == 3) {
+            Vendor::create([
+                'vendor_name' => $data['vendor_name'],
+                'vendor_owner_phone' => $data['vendor_owner_phone'],
+                'vendor_owner_name' => $data['vendor_owner_name'],
+                'user_id' => $user->id
+            ]);
+        }
         return $user;
     }
 
     public function register_farmers_market() { return view('auth.register'); }
     public function register_user() { return view('auth.register_user'); }
+    public function register_vendor() { return view('auth.register_vendor'); }
 }

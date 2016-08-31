@@ -66,6 +66,16 @@ class Migrations extends Migration
             $table->integer('rating');
             $table->timestamps();
         });
+        Schema::create('vendors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('vendor_name');
+            $table->string('vendor_owner_name');
+            $table->string('vendor_owner_phone');
+            $table->string('website');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -79,6 +89,7 @@ class Migrations extends Migration
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');
+        Schema::drop('vendors');
         Schema::drop('users');
     }
 }

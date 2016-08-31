@@ -41,7 +41,7 @@ class HomeController extends Controller
             $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 5);
             $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 6);
             $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 7);
-            return view('profile')
+            return view('profile.farmers_market')
                 ->with('monday_hours', $monday_hours)
                 ->with('tuesday_hours', $tuesday_hours)
                 ->with('wednesday_hours', $wednesday_hours)
@@ -52,6 +52,9 @@ class HomeController extends Controller
         }
         elseif(Auth::user()->type_account == 2) {
             return view('profile.user');
+        }
+        elseif(Auth::user()->type_account == 3) {
+            return view('profile.vendor');
         }
     }
 }
