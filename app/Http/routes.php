@@ -63,3 +63,7 @@ Route::get('api/farmers_markets/queried', function() {
 Route::get('api/farmers_markets', function() {
 	return App\Farmers_Market::all();
 });
+
+Route::get('photo/get/{filename}', [
+	'as' => 'getentry', 'uses' => 'HomeController@get']);
+ 

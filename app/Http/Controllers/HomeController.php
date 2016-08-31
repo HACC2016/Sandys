@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\File;
 use App\Farmers_Market_Hour;
 use App\Farmers_Market;
 use App\Review;
+use App\Photo;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class HomeController extends Controller
 {
@@ -32,7 +34,9 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::user()->type_account == 1) {
-            return view('farmers_market.home');
+            $photos = Photo::where('poster_id', Auth::id())->get();
+            return view('farmers_market.home')
+                ->with('photos', $photos);
         }
         elseif(Auth::user()->type_account == 2) {
             return view('patron.home');
@@ -109,9 +113,25 @@ class HomeController extends Controller
         return view('post_photo');
     }
     public function post_post_photo(Request $request) {
-        echo $request->caption;
         $file = $request->file('thumbnail');
         $extension = $file->getClientOriginalExtension();
         Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+        $photo = new Photo();
+        $photo->poster_id = Auth::id();
+        $photo->mime = $file->getclientmimetype();
+        $photo->original_filename = $file->getClientOriginalName();
+        $photo->filename = $file->getFilename().'.'.$extension;
+        $photo->caption = $request->caption;
+        $photo->save();
+        return redirect(url('/home'));
+    }
+
+    
+    public function get($filename){
+        $entry = Photo::where('filename', '=', $filename)->firstOrFail();
+        $file = Storage::disk('local')->get($entry->filename);
+ 
+        return (new Response($file, 200))
+              ->header('Content-Type', $entry->mime);
     }
 }

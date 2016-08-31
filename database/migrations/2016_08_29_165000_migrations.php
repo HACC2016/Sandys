@@ -102,6 +102,16 @@ class Migrations extends Migration
             $table->string('username');
             $table->timestamps();
         });
+        Schema::create('photos', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('poster_id')->unsigned();
+            $table->foreign('poster_id')->references('id')->on('users');
+            $table->string('filename');
+            $table->string('mime');
+            $table->string('original_filename');
+            $table->string('caption');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -114,10 +124,11 @@ class Migrations extends Migration
         Schema::drop('farmers_market_hours');
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');
-        Schema::drop('patrons');
+        Schema::drop('photos');
         Schema::drop('reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');
+        Schema::drop('patrons');
         Schema::drop('vendors');
         Schema::drop('users');
     }

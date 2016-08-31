@@ -13,7 +13,10 @@
                     <div class="row">
                         <div class="col-md-12">
                         <label>Photos</label><a style="padding-left: 10px" href="{{url('/post_photo')}}">Post A Photo</a>
-
+                        @foreach ($photos as $photo)
+                            <img src="{{route('getentry', $photo->filename)}}" alt="ALT NAME" class="img-responsive" />
+                            <p>{{$photo->caption}}</p>
+                        @endforeach
                         </div>
                     </div>
                 </div>
