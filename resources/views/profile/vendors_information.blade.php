@@ -26,7 +26,10 @@
 								<div class="col-md-12">
 									<ul class="list-group">
 										<li class="list-group-item active">
-											Vendors
+											Vendors<span style="padding-left: 20px;"><a href="{{url('/profile/add_vendor')}}"class="btn btn-default btn-sm">Add A Vendor</a></span>
+										</li>
+										<li class="list-group-item" v-for="vendor in vendors">
+										@{{vendor.message}}
 										</li>
 									</ul>
 								</div>

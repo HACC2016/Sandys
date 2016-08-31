@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\Farmers_Market_Hour;
 use App\Farmers_Market;
 
@@ -59,6 +61,25 @@ class HomeController extends Controller
     }
     public function profile_vendors_information() {
         return view('profile.vendors_information');
-
+    }
+    public function photos() {
+        return view('profile.photos');
+    }
+    public function post_something(Request $request) {
+        $file = $request->file('photo');
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+        /*
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+        $entry = new Fileentry();
+        $entry->mime = $file->getClientMimeType();
+        $entry->original_filename = $file->getClientOriginalName();
+        $entry->filename = $file->getFilename().'.'.$extension;
+ 
+        $entry->save();
+        */
+ 
+        //return redirect(url('/home'));
     }
 }

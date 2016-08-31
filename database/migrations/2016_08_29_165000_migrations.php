@@ -76,6 +76,24 @@ class Migrations extends Migration
             $table->string('website');
             $table->timestamps();
         });
+        Schema::create('farmers_market_vendors', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('vendor_id')->unsigned();
+            $table->foreign('vendor_id')->references('id')->on('vendors');
+            $table->integer('farmers_market_id')->unsigned();
+            $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
+            $table->string('website');
+            $table->timestamps();
+        });
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('reviewer_id')->unsigned();
+            $table->foreign('reviewer_id')->references('id')->on('users');
+            $table->integer('reviewed_id')->unsigned();
+            $table->foreign('reviewed_id')->references('id')->on('users');
+            $table->string('comment');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -87,6 +105,8 @@ class Migrations extends Migration
     {
         Schema::drop('farmers_market_hours');
         Schema::drop('farmers_market_reviews');
+        Schema::drop('farmers_market_vendors');
+        Schema::drop('reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');
         Schema::drop('vendors');

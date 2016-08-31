@@ -17,6 +17,7 @@
 								<ul class="list-inline">
 								<li><a href="{{ url('/profile' )}}">Basic Information</a></li>
 								<li><a href="{{ url('/profile/vendors_information')}}">Vendors Information</a></li>
+								<li><a href="{{ url('/profile/photos')}}">Photos</a></li>
 								</ul>
 							</li>
 					<ul class="list-group">

@@ -49,7 +49,7 @@
 										No Reviews
 									@endif
 								</ul>
-								<button class="btn btn-default btn-sm">Write A Review</button>
+								<a href="{{$farmers_market->id}}/review" class="btn btn-default btn-sm">Review</a>
 							</div>
 						</div>
 						<div class="row" id="">

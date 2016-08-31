@@ -67,6 +67,13 @@ class AuthController extends Controller
                 'password' => 'required|min:6|confirmed',
             ]);
         }
+        elseif($data['type_account'] == 2) {
+            return Validator::make($data, [
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+            ]);
+
+        }
         elseif($data['type_account'] == 3) {
             return Validator::make($data, [
                 'vendor_name' => 'required',

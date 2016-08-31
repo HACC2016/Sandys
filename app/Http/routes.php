@@ -34,10 +34,14 @@ Route::get('edit/hours', 'EditFarmersMarketController@hours');
 Route::get('/home', 'HomeController@index');
 Route::get('/profile', 'HomeController@profile');
 Route::get('/profile/vendors_information', 'HomeController@profile_vendors_information');
+Route::get('/profile/photos', 'HomeController@photos');
+Route::post('/post_something', 'HomeController@post_something');
 
 
 Route::get('/find', 'GuestController@find');
 Route::get('/farmers_market/{id}', 'GuestController@farmers_market');
+Route::get('/farmers_market/{id}/review', 'GuestController@farmers_market_review');
+Route::post('/farmers_market/{id}/review', 'GuestController@post_farmers_market_review');
 
 //API
 Route::get('api/farmers_market_reviews/{id}', function($id) {

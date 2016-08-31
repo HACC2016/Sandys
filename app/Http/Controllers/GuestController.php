@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Farmers_Market_Hour;
 use App\Farmers_Market_Review;
 use App\Farmers_Market;
+use App\Review;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -41,6 +43,18 @@ class GuestController extends Controller
         return view('farmers_market')
             ->with('farmers_market', $farmers_market)
             ->with('farmers_market_reviews', $farmers_market_reviews);
+    }
+    public function farmers_market_review() {
+        return view('farmers_market_review');
+    }
+    public function post_farmers_market_review(Request $request, $id) {
+        $comment = new Review;
+        $comment->reviewed_id = $id;
+        $comment->reviewer_id = Auth::id();
+        $comment->comment = $request->comment;
+        $comment->save();
+        $url = '/farmers_market/' . $id;
+        return redirect($url);
     }
     
 }
