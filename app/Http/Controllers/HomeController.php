@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Farmers_Market_Hour;
 use App\Farmers_Market;
+use App\Review;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -87,11 +88,12 @@ class HomeController extends Controller
         return view('farmers_market_review');
     }
     public function post_farmers_market_review(Request $request, $id) {
-        $comment = new Review;
-        $comment->reviewed_id = $id;
-        $comment->reviewer_id = Auth::id();
-        $comment->review = $request->review;
-        $comment->save();
+        $review = new Review;
+        $review->reviewed_id = $id;
+        $review->reviewer_id = Auth::id();
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+        $review->save();
         $url = '/farmers_market/' . $id;
         return redirect($url);
     }
