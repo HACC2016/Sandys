@@ -40,8 +40,8 @@ Route::post('/post_something', 'HomeController@post_something');
 
 Route::get('/find', 'GuestController@find');
 Route::get('/farmers_market/{id}', 'GuestController@farmers_market');
-Route::get('/farmers_market/{id}/review', 'GuestController@farmers_market_review');
-Route::post('/farmers_market/{id}/review', 'GuestController@post_farmers_market_review');
+Route::get('/farmers_market/{id}/review', 'HomeController@farmers_market_review');
+Route::post('/farmers_market/{id}/review', 'HomeController@post_farmers_market_review');
 
 //API
 Route::get('api/farmers_market_reviews/{id}', function($id) {

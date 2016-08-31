@@ -36,10 +36,10 @@
 							<div class="col-md-12" id="">
 								<h4>Reviews</h4>	
 								<ul class="list-group">
-									@if (count($farmers_market_reviews) === 1)
+									@if (count($farmers_market_reviews) != 0)
 										@foreach ($farmers_market_reviews as $farmers_market_review)
 											<li class="list-group-item">
-												<h4>name</h4>
+												<h4>{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</h4>
 												<p>{{$farmers_market_review->review}}</p>
 												<p>{{$farmers_market_review->created_at}}</p>
 												<p>Rating: {{$farmers_market_review->rating}}/5</p>

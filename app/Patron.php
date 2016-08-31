@@ -4,15 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Farmers_Market_Review extends Model
+class Patron extends Model
 {
-	protected $table = 'farmers_market_reviews';
+    //
+    protected $table = 'patrons';
 
     protected $fillable = [
-        'user_id', 
-        'farmers_market_id', 
-        'review', 
-        'rating', 
+        'user_id',
+        'username', 
     ];
 
     /**
@@ -22,5 +21,4 @@ class Farmers_Market_Review extends Model
      */
     protected $hidden = [
     ];
-    //
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Farmers_Market;
+use App\Patron;
 use App\Vendor;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -69,6 +70,7 @@ class AuthController extends Controller
         }
         elseif($data['type_account'] == 2) {
             return Validator::make($data, [
+                'username' => 'required',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|min:6|confirmed',
             ]);
@@ -116,6 +118,10 @@ class AuthController extends Controller
             ]);
         }
         elseif($data['type_account'] == 2) {
+            Patron::create([
+                'username' => $data['username'],
+                'user_id' => $user->id
+            ]);
         }
         elseif($data['type_account'] == 3) {
             Vendor::create([

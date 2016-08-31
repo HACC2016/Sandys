@@ -91,7 +91,15 @@ class Migrations extends Migration
             $table->foreign('reviewer_id')->references('id')->on('users');
             $table->integer('reviewed_id')->unsigned();
             $table->foreign('reviewed_id')->references('id')->on('users');
-            $table->string('comment');
+            $table->string('review');
+            $table->integer('rating');
+            $table->timestamps();
+        });
+        Schema::create('patrons', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('username');
             $table->timestamps();
         });
     }
@@ -106,6 +114,7 @@ class Migrations extends Migration
         Schema::drop('farmers_market_hours');
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');
+        Schema::drop('patrons');
         Schema::drop('reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');

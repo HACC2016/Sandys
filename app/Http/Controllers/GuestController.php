@@ -39,7 +39,8 @@ class GuestController extends Controller
     }
     public function farmers_market($id) {
         $farmers_market = Farmers_Market::find($id);
-        $farmers_market_reviews = Farmers_Market_Review::where('farmers_market_id', $farmers_market->id)->get();
+        $farmers_market_reviews = Review::where('reviewed_id', $farmers_market->user_id)->get();
+
         return view('farmers_market')
             ->with('farmers_market', $farmers_market)
             ->with('farmers_market_reviews', $farmers_market_reviews);
@@ -51,7 +52,7 @@ class GuestController extends Controller
         $comment = new Review;
         $comment->reviewed_id = $id;
         $comment->reviewer_id = Auth::id();
-        $comment->comment = $request->comment;
+        $comment->review = $request->review;
         $comment->save();
         $url = '/farmers_market/' . $id;
         return redirect($url);

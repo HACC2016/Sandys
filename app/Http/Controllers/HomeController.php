@@ -82,4 +82,17 @@ class HomeController extends Controller
  
         //return redirect(url('/home'));
     }
+    
+    public function farmers_market_review() {
+        return view('farmers_market_review');
+    }
+    public function post_farmers_market_review(Request $request, $id) {
+        $comment = new Review;
+        $comment->reviewed_id = $id;
+        $comment->reviewer_id = Auth::id();
+        $comment->review = $request->review;
+        $comment->save();
+        $url = '/farmers_market/' . $id;
+        return redirect($url);
+    }
 }

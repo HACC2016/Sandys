@@ -15,8 +15,8 @@
 						<form method="POST">
 						{{csrf_field()}}
 						<div class="form-group">
-						<label for="comment">Comment:</label>
-						<textarea style="resize:none" class="form-control" rows="5" id="comment" name="comment"></textarea>
+						<label for="comment">Review:</label>
+						<textarea style="resize:none" class="form-control" rows="5" id="review" name="review"></textarea>
 						</div>
 						<button class="btn btn-default">Send Review</button>
 						</form>
