@@ -36,6 +36,8 @@ Route::get('/profile', 'HomeController@profile');
 Route::get('/profile/vendors_information', 'HomeController@profile_vendors_information');
 Route::get('/profile/photos', 'HomeController@photos');
 Route::post('/post_something', 'HomeController@post_something');
+Route::get('/post_photo', 'HomeController@post_photo');
+Route::post('/post_photo', 'HomeController@post_post_photo');
 
 
 Route::get('/find', 'GuestController@find');

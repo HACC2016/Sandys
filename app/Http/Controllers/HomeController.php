@@ -31,7 +31,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if(Auth::user()->type_account == 1) {
+            return view('farmers_market.home');
+        }
+        elseif(Auth::user()->type_account == 2) {
+            return view('patron.home');
+        }
+        elseif(Auth::user()->type_account == 3) {
+            return view('vendor.home');
+        }
     }
 
     public function profile()
@@ -96,5 +104,14 @@ class HomeController extends Controller
         $review->save();
         $url = '/farmers_market/' . $id;
         return redirect($url);
+    }
+    public function post_photo() {
+        return view('post_photo');
+    }
+    public function post_post_photo(Request $request) {
+        echo $request->caption;
+        $file = $request->file('thumbnail');
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
     }
 }
