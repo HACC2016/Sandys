@@ -73,6 +73,13 @@
 							</li>
 						</ul>
 						<ul class="list-group">
+							<li class="list-group-item">
+								Results Template
+								<a class="btn btn-default" v-on:click.stop="listTemplate">List</a>
+								<a class="btn btn-default" v-on:click.stop="mapTemplate">Map</a>
+							</li>
+						</ul>
+						<ul class="list-group" v-show="list">
 							<article v-for="farmers_market in farmers_markets">
 								<li class="list-group-item">
 									<h3>
@@ -95,9 +102,11 @@
 								</li>
 							</article>
 						</ul>
-						<pre>
-						@{{ $data | json}}
-						</pre>
+						<ul class="list-group" v-show="map">
+							<li class="list-group-item">
+								<div id="map" style="width: 100%; height: 480px;"></div>
+							</li>
+						</ul>
 					</div> 
 				</div>
 			</div>
@@ -107,4 +116,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/vue.resource/0.9.3/vue-resource.min.js"></script>
 <script src="/js/find.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSlEzpoQVs5JupSo1ed2Wc9sLCvCsrppI&callback=initialize"> </script>
 @endsection
