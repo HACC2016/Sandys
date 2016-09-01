@@ -28,6 +28,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function getUserInformationTable($id) {
+         $user = User::find($id);
+         if($user->type_account == 1) {
+            return Farmers_Market::where('user_id', $user->id)->first();
+         }
+         elseif($user->type_account == 2) {
+            return Patron::where('user_id', $user->id)->first();
+         }
+         elseif($user->type_account == 3) {
+            return Vendor::where('user_id', $user->id)->first();
+         }
+    }
+
     public static function getNameOfUser($id) {
          $user = User::find($id);
          if($user->type_account == 1) {

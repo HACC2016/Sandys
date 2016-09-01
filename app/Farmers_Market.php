@@ -14,4 +14,7 @@ class Farmers_Market extends Model
 	public static function findFarmersMarketByUserId($id) {
 		return Farmers_Market::where('user_id', $id)->first();
 	}
+	public static function getFarmersMarket($id) {
+		return Farmers_Market::where('user_id', $id)->first();
+	}
 }

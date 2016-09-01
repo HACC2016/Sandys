@@ -27,6 +27,8 @@
 								phone number: {{$farmers_market->organizer_phone_number}}
 								<br>
 								phone number: {{$farmers_market->organizer_name}}
+								<br>
+								<a href="{{url('/follow/'.$farmers_market->user_id)}}" class="btn btn-default">Follow</a>
 							</div>
 							<div class="col-md-6" id="">
 								<div id="map" style="width: 100%; height: 140px;"></div>

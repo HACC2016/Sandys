@@ -22,7 +22,7 @@ class Migrations extends Migration
         });
         Schema::create('farmers_markets', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('farmers_market_name');
             $table->string('street_address');
@@ -68,7 +68,7 @@ class Migrations extends Migration
         });
         Schema::create('vendors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('vendor_name');
             $table->string('vendor_owner_name');
@@ -82,7 +82,6 @@ class Migrations extends Migration
             $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->integer('farmers_market_id')->unsigned();
             $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
-            $table->string('website');
             $table->timestamps();
         });
         Schema::create('reviews', function (Blueprint $table) {
@@ -112,6 +111,29 @@ class Migrations extends Migration
             $table->string('caption');
             $table->timestamps();
         });
+        Schema::create('follows', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('follower_id')->unsigned();
+            $table->foreign('follower_id')->references('id')->on('users');
+            $table->integer('followed_id')->unsigned();
+            $table->foreign('followed_id')->references('id')->on('users');
+            $table->timestamps();
+        });
+        Schema::create('posts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('message');
+            $table->timestamps();
+        });
+        Schema::create('post_likes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('post_id')->unsigned();
+            $table->foreign('post_id')->references('id')->on('posts');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -125,6 +147,9 @@ class Migrations extends Migration
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');
         Schema::drop('photos');
+        Schema::drop('follows');
+        Schema::drop('post_likes');
+        Schema::drop('posts');
         Schema::drop('reviews');
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');

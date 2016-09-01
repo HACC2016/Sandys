@@ -8,6 +8,11 @@ use App\Farmers_Market_Hour;
 use App\Farmers_Market;
 use App\Review;
 use App\Photo;
+use App\Vendor;
+use App\Post;
+use App\Follow;
+use App\User;
+use App\Farmers_Market_Vendor;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -34,12 +39,34 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::user()->type_account == 1) {
-            $photos = Photo::where('poster_id', Auth::id())->get();
+            $photos = Photo::where('poster_id', Auth::id())
+                ->take(4)
+                ->get();
+            $vendors = Farmers_Market_Vendor::where('farmers_market_id', Farmers_Market::getFarmersMarket(Auth::id())->id)
+                ->get();
+            $follows = Follow::where('followed_id', Auth::id())->get();
+            $posts = Post::where('user_id', Auth::id())->get();
             return view('farmers_market.home')
-                ->with('photos', $photos);
+                ->with('photos', $photos)
+                ->with('vendors', $vendors)
+                ->with('posts', $posts)
+                ->with('follows', $follows);
         }
         elseif(Auth::user()->type_account == 2) {
-            return view('patron.home');
+            $follows = Follow::where('follower_id', Auth::id())->get();
+            $posts = Post::orderBy('created_at');
+            for($i = 0; $i < count($follows); $i++) {
+                $posts = $posts->orWhere('user_id', $follows[$i]->followed_id);
+            }
+            $posts = $posts->get();
+            /*
+            $follows = Follow::where('follower_id', Auth::id())->get();
+            for($i = 0; $i < count($follows); $i++) {
+                $posts[] = Post::where('user_id', $follows[$i]->followed_id)->get();
+            }
+            */
+            return view('patron.home')
+                ->with('posts', $posts);
         }
         elseif(Auth::user()->type_account == 3) {
             return view('vendor.home');
@@ -78,24 +105,6 @@ class HomeController extends Controller
     public function photos() {
         return view('profile.photos');
     }
-    public function post_something(Request $request) {
-        $file = $request->file('photo');
-        $extension = $file->getClientOriginalExtension();
-        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
-        /*
-        $extension = $file->getClientOriginalExtension();
-        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
-        $entry = new Fileentry();
-        $entry->mime = $file->getClientMimeType();
-        $entry->original_filename = $file->getClientOriginalName();
-        $entry->filename = $file->getFilename().'.'.$extension;
- 
-        $entry->save();
-        */
- 
-        //return redirect(url('/home'));
-    }
-    
     public function farmers_market_review() {
         return view('farmers_market_review');
     }
@@ -130,8 +139,67 @@ class HomeController extends Controller
     public function get($filename){
         $entry = Photo::where('filename', '=', $filename)->firstOrFail();
         $file = Storage::disk('local')->get($entry->filename);
- 
         return (new Response($file, 200))
               ->header('Content-Type', $entry->mime);
+    }
+
+    public function add_vendor(){
+        return view('farmers_market.add_vendor');
+    }
+    public function post_add_vendor(Request $request){
+        echo $request->vendor_id;
+        $farmers_market_vendor = new Farmers_Market_Vendor;
+        $farmers_market_vendor->vendor_id = $request->vendor_id;
+        $farmers_market_id = Farmers_Market::getFarmersMarket(Auth::id())->id;
+        $farmers_market_vendor->farmers_market_id = $farmers_market_id;
+        $farmers_market_vendor->save();
+        return redirect(url('/my_vendors'));
+    }
+
+    public function post_add_new_vendor(Request $request){
+        echo $request->vendor_name;
+        $farmers_market_id = Farmers_Market::getFarmersMarket(Auth::id())->id;
+        $vendor = new Vendor;
+        $vendor->vendor_name = $request->vendor_name;
+        $vendor->user_id = null;
+        $vendor->save();
+        $farmers_market_vendor = new Farmers_Market_Vendor;
+        $farmers_market_vendor->vendor_id = $vendor->id;
+        $farmers_market_id = Farmers_Market::getFarmersMarket(Auth::id())->id;
+        $farmers_market_vendor->farmers_market_id = $farmers_market_id;
+        $farmers_market_vendor->save();
+        return redirect(url('/my_vendors'));
+    }
+
+    public function my_vendors() {
+        $farmers_market_id = Farmers_Market::getFarmersMarket(Auth::id())->id;
+        $vendors = Farmers_Market_Vendor::where('farmers_market_id', $farmers_market_id)->get();
+        return view('farmers_market.my_vendors')
+            ->with('vendors', $vendors);
+    }
+
+    public function my_photos() {
+        $photos = Photo::where('poster_id', Auth::id())
+            ->get();
+        return view('farmers_market.my_photos')
+            ->with('photos', $photos);
+    }
+
+    public function my_followers() {
+        $follows = Follow::where('followed_id', Auth::id())->get();
+        return view('farmers_market.my_followers')
+            ->with('follows', $follows);
+    }
+
+    public function add_post() {
+        return view('farmers_market.add_post');
+    }
+
+    public function post_add_post(Request $request) {
+        $post = new Post;
+        $post->message = $request->message;
+        $post->user_id = Auth::id();
+        $post->save();
+        return redirect(url('/home'));
     }
 }
