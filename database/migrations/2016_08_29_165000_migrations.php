@@ -134,6 +134,18 @@ class Migrations extends Migration
             $table->foreign('post_id')->references('id')->on('posts');
             $table->timestamps();
         });
+        Schema::create('vendor_items', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('vendor_id')->unsigned();
+            $table->foreign('vendor_id')->references('id')->on('vendors');
+            $table->integer('photo_id')->unsigned();
+            $table->foreign('photo_id')->references('id')->on('photos');
+            $table->string('item');
+            $table->string('description');
+            $table->decimal('price', 10, 2);
+            $table->integer('price_per');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -146,7 +158,6 @@ class Migrations extends Migration
         Schema::drop('farmers_market_hours');
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');
-        Schema::drop('photos');
         Schema::drop('follows');
         Schema::drop('post_likes');
         Schema::drop('posts');
@@ -154,6 +165,8 @@ class Migrations extends Migration
         Schema::drop('farmers_markets');
         Schema::drop('password_resets');
         Schema::drop('patrons');
+        Schema::drop('vendor_items');
+        Schema::drop('photos');
         Schema::drop('vendors');
         Schema::drop('users');
     }

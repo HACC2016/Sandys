@@ -79,7 +79,7 @@
 								<a class="btn btn-default" v-on:click.stop="mapTemplate">Map</a>
 							</li>
 						</ul>
-						<ul class="list-group" v-show="list">
+						<ul class="list-group" v-show="listToggle">
 							<article v-for="farmers_market in farmers_markets">
 								<li class="list-group-item">
 									<h3>
@@ -102,7 +102,7 @@
 								</li>
 							</article>
 						</ul>
-						<ul class="list-group" v-show="map">
+						<ul class="list-group" v-show="mapToggle">
 							<li class="list-group-item">
 								<div id="map" style="width: 100%; height: 480px;"></div>
 							</li>

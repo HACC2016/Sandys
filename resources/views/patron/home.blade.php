@@ -20,6 +20,10 @@
                     @endforeach
 
                     </ul>
+                    <label>My Reviews</label><a style="padding-left:10px" href="{{url('/write_new_review')}}">Write A New Review</a>
+                    <ul class="list-group">
+
+                    </ul>
                 </div>
             </div>
         </div>

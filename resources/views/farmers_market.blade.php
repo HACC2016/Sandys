@@ -28,7 +28,9 @@
 								<br>
 								phone number: {{$farmers_market->organizer_name}}
 								<br>
+								@if (Auth::check())
 								<a href="{{url('/follow/'.$farmers_market->user_id)}}" class="btn btn-default">Follow</a>
+								@endif
 							</div>
 							<div class="col-md-6" id="">
 								<div id="map" style="width: 100%; height: 140px;"></div>
@@ -58,12 +60,19 @@
 							<div class="col-md-12" id="">
 								<h4>Vendor List</h4>
 								<ul class="list-group">
-									<li class="list-group-item">
-										<h4>name</h4>
-										<p>review</p>
-										<p>Date</p>
-										<p>3.5/5</p>
-									</li>
+									@if(count($vendors_id) == 0)
+										No Vendors Are Listed
+									@else
+										<ul class="list-group">
+											@foreach ($vendors_id as $vendor_id)
+												<li class="list-group-item">
+												<h4>
+													<a href="{{url('/vendor/'.$vendor_id->id)}}">{{App\Vendor::find($vendor_id->id)->vendor_name}}</a>
+												</h4>
+												</li>
+											@endforeach
+										</ul>
+									@endif
 								</ul>
 							</div>
 						</div>

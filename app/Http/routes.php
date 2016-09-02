@@ -46,6 +46,11 @@ Route::get('/farmers_market/{id}', 'GuestController@farmers_market');
 Route::get('/farmers_market/{id}/review', 'HomeController@farmers_market_review');
 Route::post('/farmers_market/{id}/review', 'HomeController@post_farmers_market_review');
 
+Route::get('/write_new_review', 'HomeController@write_new_review');
+
+Route::get('/vendor/{id}', 'GuestController@vendor');
+
+Route::get('/write_new_review', 'HomeController@write_new_review');
 Route::get('add_vendor', 'HomeController@add_vendor');
 Route::post('add_vendor', 'HomeController@post_add_vendor');
 Route::post('add_new_vendor', 'HomeController@post_add_new_vendor');
@@ -54,6 +59,9 @@ Route::get('my_followers', 'HomeController@my_followers');
 Route::get('add_post', 'HomeController@add_post');
 Route::post('add_post', 'HomeController@post_add_post');
 
+Route::get('my_vendor_items', 'HomeController@my_vendor_items');
+Route::get('add_vendor_item', 'HomeController@add_vendor_item');
+Route::post('add_vendor_item', 'HomeController@post_add_vendor_item');
 
 //API
 Route::get('/like_post/{id}', function($id) {

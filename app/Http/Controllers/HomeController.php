@@ -12,6 +12,7 @@ use App\Vendor;
 use App\Post;
 use App\Follow;
 use App\User;
+use App\Vendor_Item;
 use App\Farmers_Market_Vendor;
 
 use App\Http\Requests;
@@ -59,17 +60,22 @@ class HomeController extends Controller
                 $posts = $posts->orWhere('user_id', $follows[$i]->followed_id);
             }
             $posts = $posts->get();
-            /*
-            $follows = Follow::where('follower_id', Auth::id())->get();
-            for($i = 0; $i < count($follows); $i++) {
-                $posts[] = Post::where('user_id', $follows[$i]->followed_id)->get();
-            }
-            */
             return view('patron.home')
                 ->with('posts', $posts);
         }
         elseif(Auth::user()->type_account == 3) {
-            return view('vendor.home');
+            $vendor = Vendor::where('user_id', Auth::id())->first();
+            $photos = Photo::where('poster_id', Auth::id())
+                ->take(4)
+                ->get();
+            $follows = Follow::where('followed_id', Auth::id())->get();
+            $posts = Post::where('user_id', Auth::id())->get();
+            $vendor_items = Vendor_Item::where('vendor_id', $vendor->id)->get();
+            return view('vendor.home')
+                ->with('photos', $photos)
+                ->with('posts', $posts)
+                ->with('vendor_items', $vendor_items)
+                ->with('follows', $follows);
         }
     }
 
@@ -201,5 +207,40 @@ class HomeController extends Controller
         $post->user_id = Auth::id();
         $post->save();
         return redirect(url('/home'));
+    }
+
+    public function write_new_review() {
+        return view('write_new_review');
+    }
+
+    public function add_vendor_item() {
+        return view('vendor.add_vendor_item');
+    }
+
+    public function post_add_vendor_item(Request $request) {
+        $file = $request->file('thumbnail');
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+        $photo = new Photo();
+        $photo->poster_id = Auth::id();
+        $photo->mime = $file->getclientmimetype();
+        $photo->original_filename = $file->getClientOriginalName();
+        $photo->filename = $file->getFilename().'.'.$extension;
+        $photo->save();
+        $vendor_item = new Vendor_Item;
+        $vendor_item->item = $request->item_name;
+        $vendor_item->vendor_id = User::getUserInformationTable(Auth::id())->id;
+        $vendor_item->description = $request->description;
+        $vendor_item->price = $request->price;
+        $vendor_item->price_per = $request->price_per;
+        $vendor_item->photo_id = $photo->id;
+        $vendor_item->save();
+        return redirect(url('/my_vendor_items'));
+    }
+
+    public function my_vendor_items() {
+        $vendor_items = Vendor_Item::where('vendor_id', User::getUserInformationTable(Auth::id())->id)->get();
+        return view('vendor.my_vendor_items')
+            ->with('vendor_items', $vendor_items);
     }
 }

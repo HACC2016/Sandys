@@ -1,8 +1,8 @@
 var vue = new Vue({
 	el: '#find',
 	data: {
-		list:false,
-		map:true,
+		listToggle:false,
+		mapToggle:true,
 		markers: [], 
 	},
 	ready: function() {
@@ -44,10 +44,25 @@ var vue = new Vue({
 
 			this.deleteMarkers();
 			for($i = 0; $i < this.farmers_markets.length; $i++) { 
+				var contentString = '<div id="content">'+
+	            '<div id="siteNotice">'+
+	            '</div>'+
+	            '<h3 id="firstHeading" class="firstHeading">' + 
+	            '<a href="/farmers_market/' + this.farmers_markets[$i].id + '">' + this.farmers_markets[$i].farmers_market_name + '</a>'+
+	            '</h3>'+
+	            '</div>'+
+	            '</div>';
+
+				var infowindow = new google.maps.InfoWindow({
+		          content: contentString
+		        });
 				var latlng = new google.maps.LatLng(this.farmers_markets[$i].lat, this.farmers_markets[$i].lng);
 				var marker = new google.maps.Marker({
 					map: this.map,
 					position: latlng
+				});
+				marker.addListener('click', function() {
+					infowindow.open(this.map, marker);
 				});
 				this.markers.push(marker);
 			}
@@ -67,20 +82,19 @@ var vue = new Vue({
 		},
 		listTemplate: function() {
 			console.log('list')
-			this.list = true;
-			this.map = false;
+			this.listToggle = true;
+			this.mapToggle = false;
 		},
 		mapTemplate: function() {
 			console.log('map')
-			this.list = false;
-			this.map = true;
+			this.listToggle = false;
+			this.mapToggle = true;
 		},
 		initialize: function() {
 			var latlng = new google.maps.LatLng(12, 13);
 			var mapOptions = {
 				zoom: 12,
 				center: latlng,
-				draggable: false,
 			}
 			this.$set('map', new google.maps.Map(document.getElementById('map'), mapOptions));
 		},
