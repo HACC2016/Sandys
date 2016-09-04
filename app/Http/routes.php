@@ -45,6 +45,8 @@ Route::get('/find', 'GuestController@find');
 Route::get('/farmers_market/{id}', 'GuestController@farmers_market');
 Route::get('/farmers_market/{id}/review', 'HomeController@farmers_market_review');
 Route::post('/farmers_market/{id}/review', 'HomeController@post_farmers_market_review');
+Route::get('/vendor/{id}/review', 'HomeController@add_vendor_review');
+Route::post('/vendor/{id}/review', 'HomeController@post_add_vendor_review');
 
 Route::get('/write_new_review', 'HomeController@write_new_review');
 
@@ -59,26 +61,60 @@ Route::get('my_followers', 'HomeController@my_followers');
 Route::get('add_post', 'HomeController@add_post');
 Route::post('add_post', 'HomeController@post_add_post');
 
+Route::get('patron/{id}', 'GuestController@patron');
+
 Route::get('my_vendor_items', 'HomeController@my_vendor_items');
 Route::get('add_vendor_item', 'HomeController@add_vendor_item');
 Route::post('add_vendor_item', 'HomeController@post_add_vendor_item');
 
+Route::get('add_event', 'HomeController@add_event');
+Route::post('add_event', 'HomeController@post_add_event');
+Route::get('my_events', 'HomeController@my_events');
+
+Route::get('my_reviews', 'HomeController@my_reviews');
+Route::get('edit/review/{id}', 'HomeController@edit_review');
+Route::post('edit/review/{id}', 'HomeController@post_edit_review');
+
+Route::post('delete/review', function (Request $request) {
+	echo $request::input('id');
+	if(App\Review::find($request::input('id'))){
+		App\Review::find($request::input('id'))->delete();
+	}
+	return Redirect::back();
+});
 //API
 Route::get('/like_post/{id}', function($id) {
-	$post_like = new App\Post_Like;
-	$post_like->user_id = Auth::id();
-	$post_like->post_id = $id;
-	$post_like->save();
+	if(App\Post_like::where('user_id', Auth::id())->where('post_id', $id)->count() == 0) {
+		$post_like = new App\Post_Like;
+		$post_like->user_id = Auth::id();
+		$post_like->post_id = $id;
+		$post_like->save();
+	}
+	return Redirect::back();
+});
+Route::get('/unlike_post/{id}', function($id) {
+	$post_like = App\Post_Like::where('user_id', Auth::id())
+		->where('post_id', $id)->first();
+	if($post_like != null) {
+		$post_like->delete();
+	}
 	return Redirect::back();
 });
 
 Route::get('/follow/{id}', function($id) {
 	$follow = new App\Follow;
-	$follow->followed_id = $id;
+	$follow->followed_id = App\User::getUserInformationTable($id)->user_id;
 	$follow->follower_id = Auth::id();
 	$follow->save();
 	return Redirect::back();
+});
 
+Route::get('/unfollow/{id}', function($id) {
+	$follow = App\Follow::where('followed_id', App\User::getUserInformationTable($id)->user_id)
+		->where('follower_id', Auth::id())
+		->first();
+	$follow->delete();
+	return Redirect::back();
 });
 
 Route::get('api/farmers_market_reviews/{id}', function($id) {

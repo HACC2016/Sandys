@@ -49,11 +49,35 @@
                                 <p>{{$post->message}}</p>
                                 <p>{{$post->created_at}}</p>
                                 <p>
-                                <a href="{{url('/like_post/'.$post->id)}}" class="btn btn-default">Like</a>
+                                @if (App\Post_Like::where('user_id', Auth::id())->where('post_id', $post->id)->count() == 0)
+                                    <a href="{{url('/like_post/'.$post->id)}}" class="btn btn-default">Like</a>
+                                @else
+                                    <a href="{{url('/unlike_post/'.$post->id)}}" class="btn btn-default">Unlike</a>
+                                @endif
                                 </p>
                                 <p>
-                                {{App\Post_Like::where('user_id', $post->user_id)->count()}}<i style="padding-left: 10px;" class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                {{App\Post_Like::count()}}<i style="padding-left: 10px;" class="fa fa-thumbs-o-up" aria-hidden="true"></i>
                                 </p>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="panel-heading">Events <a style="padding-left: 10px" href="{{url('/add_event')}}">Add New Event</a>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        @foreach ($events as $event)
+                            <li class="list-group-item">
+                                <div class="row" id="">
+                                    <div class="col-md-6" id="">
+                                        <h4>{{$event->event_name}}</h4>
+                                        <p>{{$event->event_description}}</p>
+                                    </div>
+                                    <div class="col-md-6" id="">
+                                        <p>Start Time: {{$event->start_month}} {{$event->start_day}} {{$event->start_year}}</p>
+                                        <p>End Time: {{$event->end_month}} {{$event->end_day}} {{$event->end_year}}</p>
+                                    </div>
+                                </div>
                             </li>
                         @endforeach
                     </ul>

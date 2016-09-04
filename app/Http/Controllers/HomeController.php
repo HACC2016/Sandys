@@ -14,6 +14,7 @@ use App\Follow;
 use App\User;
 use App\Vendor_Item;
 use App\Farmers_Market_Vendor;
+use App\Event;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -47,10 +48,12 @@ class HomeController extends Controller
                 ->get();
             $follows = Follow::where('followed_id', Auth::id())->get();
             $posts = Post::where('user_id', Auth::id())->get();
+            $events = Event::where('user_id', Auth::id())->get();
             return view('farmers_market.home')
                 ->with('photos', $photos)
                 ->with('vendors', $vendors)
                 ->with('posts', $posts)
+                ->with('events', $events)
                 ->with('follows', $follows);
         }
         elseif(Auth::user()->type_account == 2) {
@@ -60,8 +63,10 @@ class HomeController extends Controller
                 $posts = $posts->orWhere('user_id', $follows[$i]->followed_id);
             }
             $posts = $posts->get();
+            $my_reviews = Review::where('reviewer_id', Auth::id())->get();
             return view('patron.home')
-                ->with('posts', $posts);
+                ->with('posts', $posts)
+                ->with('my_reviews', $my_reviews);
         }
         elseif(Auth::user()->type_account == 3) {
             $vendor = Vendor::where('user_id', Auth::id())->first();
@@ -116,7 +121,7 @@ class HomeController extends Controller
     }
     public function post_farmers_market_review(Request $request, $id) {
         $review = new Review;
-        $review->reviewed_id = $id;
+        $review->reviewed_id = Farmers_Market::find($id)->user_id;
         $review->reviewer_id = Auth::id();
         $review->review = $request->review;
         $review->rating = $request->rating;
@@ -242,5 +247,61 @@ class HomeController extends Controller
         $vendor_items = Vendor_Item::where('vendor_id', User::getUserInformationTable(Auth::id())->id)->get();
         return view('vendor.my_vendor_items')
             ->with('vendor_items', $vendor_items);
+    }
+    public function add_vendor_review() {
+        return view('add_vendor_review');
+    }
+    public function post_add_vendor_review(Request $request, $id) {
+        $review = new Review;
+        $review->reviewed_id = Vendor::find($id)->user_id;
+        $review->reviewer_id = Auth::id();
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+        $review->save();
+        $url = '/vendor/' . $id;
+        echo Vendor::find($id);
+        return redirect($url);
+    }
+    public function my_reviews() {
+        $reviews = Review::where('reviewer_id', Auth::id())->get();
+        return view('patron.my_reviews')
+            ->with('reviews', $reviews);
+    }
+    public function edit_review($id) {
+        $review = Review::find($id);
+        return view('patron.edit_review')
+            ->with('review', $review);
+    }
+    public function post_edit_review(Request $request, $id) {
+        $review = Review::find($id);
+        if($review->reviewer_id != Auth::id()) {
+            return redirect('/my_reviews');
+        }
+        $review->rating = $request->rating;
+        $review->review = $request->review;
+        $review->save();
+        return redirect('/my_reviews');
+    }
+    public function add_event() {
+        return view('farmers_market.add_event');
+    }
+    public function post_add_event(Request $request) {
+        $event = new Event;
+        $event->user_id = Auth::id();
+        $event->event_name = $request->event_name;
+        $event->event_description = $request->event_description;
+        $event->start_month = $request->start_month;
+        $event->start_day = $request->start_day;
+        $event->start_year = $request->start_year;
+        $event->end_month = $request->end_month;
+        $event->end_day = $request->end_day;
+        $event->end_year = $request->end_year;
+        $event->save();
+        return redirect('/my_events');
+    }
+    public function my_events() {
+        $events = Event::where('user_id', Auth::id())->get();
+        return view('farmers_market.my_events')
+            ->with('events', $events);
     }
 }

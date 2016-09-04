@@ -146,6 +146,20 @@ class Migrations extends Migration
             $table->integer('price_per');
             $table->timestamps();
         });
+        Schema::create('events', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('event_name');
+            $table->string('event_description');
+            $table->integer('start_month');
+            $table->integer('start_day');
+            $table->integer('start_year');
+            $table->integer('end_month');
+            $table->integer('end_day');
+            $table->integer('end_year');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -155,6 +169,7 @@ class Migrations extends Migration
      */
     public function down()
     {
+        Schema::drop('events');
         Schema::drop('farmers_market_hours');
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');

@@ -45,14 +45,25 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <label style="padding-top: 10px">Items I'm Selling</label>
+                            <label style="padding-top: 10px">Items I'm Selling</label> ({{count($vendor_items)}}) <a style="padding-left:10px;" href="{{url('my_vendor_items')}}">Add A Vendor Item</a>
                             <ul class="list-group">
                                 @if(count($vendor_items) == 0)
                                     <a href="{{url('/add_vendor_item')}}">
                                     You are currently not selling Anything.  Click Here to add items</a>
                                 @else
                                     @foreach ($vendor_items as $vendor_item)
-                                        {{$vendor_item}}
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-3" id="">
+                                                    <img src="{{route('getentry', App\Photo::find($vendor_item->photo_id)->filename)}}" alt="ALT NAME" class="img-responsive" />
+                                                </div>
+                                                <div class="col-md-9" id="">
+                                                    <h4>{{$vendor_item->item}}</h4>
+                                                    <p>{{$vendor_item->description}}</p>
+                                                    <p>${{$vendor_item->price}} per {{$vendor_item->price_per}}</p>
+                                                </div>
+                                            </div>
+                                        </li>
                                     @endforeach
                                 @endif
                             </ul>

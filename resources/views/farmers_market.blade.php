@@ -29,7 +29,11 @@
 								phone number: {{$farmers_market->organizer_name}}
 								<br>
 								@if (Auth::check())
-								<a href="{{url('/follow/'.$farmers_market->user_id)}}" class="btn btn-default">Follow</a>
+									@if (App\Follow::where('follower_id', Auth::id())->where('followed_id', $farmers_market->id)->count() == 0)
+										<a href="{{url('/follow/'.$farmers_market->user_id)}}" class="btn btn-default">Follow</a>
+									@else
+										<a href="{{url('/unfollow/'.$farmers_market->user_id)}}" class="btn btn-default">Unfollow</a>
+									@endif
 								@endif
 							</div>
 							<div class="col-md-6" id="">
@@ -43,7 +47,13 @@
 									@if (count($farmers_market_reviews) != 0)
 										@foreach ($farmers_market_reviews as $farmers_market_review)
 											<li class="list-group-item">
-												<h4>{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</h4>
+					                            @if (App\User::find($farmers_market_review->reviewer_id)->type_account == 1)
+					                                <h3><a href="{{url('/farmers_market/'. App\User::getUserInformationTable($farmers_market_review->reviewer_id)->id)}}">{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</a></h3>
+					                            @elseif (App\User::find($farmers_market_review->reviewer_id)->type_account == 2)
+					                                <h3><a href="{{url('/patron/'. App\User::getUserInformationTable($farmers_market_review->reviewer_id)->id)}}">{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</a></h3>
+					                            @elseif (App\User::find($farmers_market_review->reviewer_id)->type_account == 2)
+					                                <h3><a href="{{url('/vendor/'. App\User::getUserInformationTable($farmers_market_review->reviewer_id)->id)}}">{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</a></h3>
+					                            @endif
 												<p>{{$farmers_market_review->review}}</p>
 												<p>{{$farmers_market_review->created_at}}</p>
 												<p>Rating: {{$farmers_market_review->rating}}/5</p>

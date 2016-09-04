@@ -13,17 +13,50 @@
                     <label>What's Going On</label>
                     <ul class="list-group">
                     @foreach ($posts as $post)
-                            <li class="list-group-item">
-                                <h3>{{App\User::getNameOfUser($post->user_id)}}</h3>
-                                <p>{{$post->message}}</p>
-                            </li>
+                        <li class="list-group-item">
+                            @if (App\User::find($post->user_id)->type_account == 1)
+                                <h3><a href="{{url('/farmers_market/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                            @elseif (App\User::find($post->user_id)->type_account == 2)
+                                <h3><a href="{{url('/patron/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                            @elseif (App\User::find($post->user_id)->type_account == 2)
+                                <h3><a href="{{url('/vendor/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                            @endif
+                            <p>{{$post->message}}</p>
+                            <p>
+                                @if (App\Post_Like::where('user_id', Auth::id())->where('post_id', $post->id)->count() == 0)
+                                    <a href="{{url('/like_post/'.$post->id)}}" class="btn btn-default">Like</a>
+                                @else
+                                    <a href="{{url('/unlike_post/'.$post->id)}}" class="btn btn-default">Unlike</a>
+                                @endif
+                                </p>
+                            <p>
+                                {{App\Post_Like::count()}}<i style="padding-left: 10px;" class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                            </p>
+                        </li>
                     @endforeach
 
                     </ul>
-                    <label>My Reviews</label><a style="padding-left:10px" href="{{url('/write_new_review')}}">Write A New Review</a>
-                    <ul class="list-group">
-
-                    </ul>
+                    <label>My Reviews ({{count($my_reviews)}})</label>
+                    <a style="padding-left:10px" href="{{url('/write_new_review')}}">Write A New Review</a>
+                    <a style="padding-left:10px" href="{{url('/my_reviews')}}">View My Reviews</a>
+                    @if (count($my_reviews) == 0)
+                        <p> You have written no Reviews yet. </p>
+                    @else
+                        <ul class="list-group">
+                            @foreach ($my_reviews as $my_review)
+                                <li class="list-group-item">
+                                    <p>{{$my_review->review}}</p>
+                                    <p>{{$my_review->rating}}</p>
+                                    <a href="{{url('edit/review/' . $my_review->id)}}" class="btn btn-default">Edit</a>
+                                    <form method="POST" action="{{url('/delete/review')}}">
+                                        {{csrf_field()}}
+                                        <input type="hidden" readonly="readonly" value="{{$my_review->id}}" name="id">
+                                        <button class="btn btn-default">Delete</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
             </div>
         </div>
