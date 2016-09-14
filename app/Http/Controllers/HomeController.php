@@ -15,10 +15,14 @@ use App\User;
 use App\Vendor_Item;
 use App\Farmers_Market_Vendor;
 use App\Event;
+use App\Farmers_Market_Vendor_Map;
+use App\Twitter_Info;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+
+use Socialite;
 
 class HomeController extends Controller
 {
@@ -66,6 +70,7 @@ class HomeController extends Controller
             $my_reviews = Review::where('reviewer_id', Auth::id())->get();
             return view('patron.home')
                 ->with('posts', $posts)
+                ->with('follows', $follows)
                 ->with('my_reviews', $my_reviews);
         }
         elseif(Auth::user()->type_account == 3) {
@@ -75,11 +80,14 @@ class HomeController extends Controller
                 ->get();
             $follows = Follow::where('followed_id', Auth::id())->get();
             $posts = Post::where('user_id', Auth::id())->get();
+            $farmers_markets_part_of = Farmers_Market_Vendor::where('vendor_id', $vendor->id)->get();
             $vendor_items = Vendor_Item::where('vendor_id', $vendor->id)->get();
             return view('vendor.home')
                 ->with('photos', $photos)
+                ->with('vendor', $vendor)
                 ->with('posts', $posts)
                 ->with('vendor_items', $vendor_items)
+                ->with('farmers_markets_part_of', $farmers_markets_part_of)
                 ->with('follows', $follows);
         }
     }
@@ -87,13 +95,15 @@ class HomeController extends Controller
     public function profile()
     {
         if(Auth::user()->type_account == 1) {
-            $monday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 1);
-            $tuesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 2);
-            $wednesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 3);
-            $thursday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 4);
-            $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 5);
-            $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 6);
-            $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($this->user->id, 7);
+            $farmers_market_id = User::getUserInformationTable(Auth::id())->id;
+            $monday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 1);
+            $tuesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 2);
+            $wednesday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 3);
+            $thursday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 4);
+            $friday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 5);
+            $saturday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 6);
+            $sunday_hours = Farmers_Market_Hour::getHoursByFarmersMarketIdAndDay($farmers_market_id, 7);
+            $twitter_info = Twitter_Info::where('user_id', Auth::id())->first();
             return view('profile.farmers_market')
                 ->with('monday_hours', $monday_hours)
                 ->with('tuesday_hours', $tuesday_hours)
@@ -101,6 +111,7 @@ class HomeController extends Controller
                 ->with('thursday_hours', $thursday_hours)
                 ->with('friday_hours', $friday_hours)
                 ->with('saturday_hours', $saturday_hours)
+                ->with('twitter_info', $twitter_info)
                 ->with('sunday_hours', $sunday_hours);
         }
         elseif(Auth::user()->type_account == 2) {
@@ -147,12 +158,7 @@ class HomeController extends Controller
     }
 
     
-    public function get($filename){
-        $entry = Photo::where('filename', '=', $filename)->firstOrFail();
-        $file = Storage::disk('local')->get($entry->filename);
-        return (new Response($file, 200))
-              ->header('Content-Type', $entry->mime);
-    }
+    
 
     public function add_vendor(){
         return view('farmers_market.add_vendor');
@@ -223,22 +229,46 @@ class HomeController extends Controller
     }
 
     public function post_add_vendor_item(Request $request) {
-        $file = $request->file('thumbnail');
-        $extension = $file->getClientOriginalExtension();
-        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
-        $photo = new Photo();
-        $photo->poster_id = Auth::id();
-        $photo->mime = $file->getclientmimetype();
-        $photo->original_filename = $file->getClientOriginalName();
-        $photo->filename = $file->getFilename().'.'.$extension;
-        $photo->save();
         $vendor_item = new Vendor_Item;
+        $file = $request->file('thumbnail');
+        if($file != null) {
+            $extension = $file->getClientOriginalExtension();
+            Storage::disk('local')->put('photos/' . $file->getFilename().'.'.$extension,  File::get($file));
+            $photo = new Photo();
+            $photo->poster_id = Auth::id();
+            $photo->mime = $file->getclientmimetype();
+            $photo->original_filename = $file->getClientOriginalName();
+            $photo->filename = $file->getFilename().'.'.$extension;
+            $photo->save();
+            $vendor_item->photo_id = $photo->id;
+        }
+        else {
+            $vendor_item->photo_id = null;
+        }
         $vendor_item->item = $request->item_name;
         $vendor_item->vendor_id = User::getUserInformationTable(Auth::id())->id;
         $vendor_item->description = $request->description;
         $vendor_item->price = $request->price;
         $vendor_item->price_per = $request->price_per;
-        $vendor_item->photo_id = $photo->id;
+        if(isset($request->local)) {
+            $vendor_item->local = true;
+        }
+        else {
+            $vendor_item->local = false;
+        }
+        if(isset($request->nongmo)) {
+            $vendor_item->nongmo = true;
+        }
+        else {
+            $vendor_item->nongmo = false;
+        }
+        if(isset($request->organic)) {
+            $vendor_item->organic = true;
+        }
+        else {
+            $vendor_item->organic = false;
+        }
+        $vendor_item->farm = $request->farm;
         $vendor_item->save();
         return redirect(url('/my_vendor_items'));
     }
@@ -303,5 +333,129 @@ class HomeController extends Controller
         $events = Event::where('user_id', Auth::id())->get();
         return view('farmers_market.my_events')
             ->with('events', $events);
+    }
+    public function my_vendor_map() {
+        $id = User::getUserInformationTable(Auth::id())->id;
+        $map = Farmers_Market_Vendor_Map::where('farmers_market_id', $id)->first();
+        $photo = null;
+        if($map != null) {
+            $photo = Photo::find($map->photo_id);
+        }
+        $vendor_ids = Farmers_Market_Vendor::where('farmers_market_id', $id)->get();
+        return view('farmers_market.my_vendor_map')
+            ->with('photo', $photo)
+            ->with('vendor_ids', $vendor_ids)
+            ->with('id', $id);
+    }
+    public function post_my_vendor_map(Request $request) {
+        $file = $request->file('thumbnail');
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put('/photos/' . $file->getFilename().'.'.$extension,  File::get($file));
+        $photo = new Photo();
+        $photo->poster_id = Auth::id();
+        $photo->mime = $file->getclientmimetype();
+        $photo->original_filename = $file->getClientOriginalName();
+        $photo->filename = $file->getFilename().'.'.$extension;
+        $photo->save();
+        $farmers_market_vendor_map = new Farmers_Market_Vendor_Map();
+        $farmers_market_vendor_map->farmers_market_id = User::getUserInformationTable(Auth::id())->id;
+        $farmers_market_vendor_map->photo_id = $photo->id;
+        $farmers_market_vendor_map->save();
+        return redirect(url('/my_vendor_map'));
+    }
+    public function edit_vendor_item($id) {
+        $vendor_item = Vendor_Item::find($id);
+        return view('vendor.edit_vendor_item')
+            ->with('vendor_item', $vendor_item);
+    }
+    public function post_edit_vendor_item(Request $request, $id) {
+        $vendor_item = Vendor_Item::find($id);
+        $file = $request->file('thumbnail');
+        if($file != null) {
+            $extension = $file->getClientOriginalExtension();
+            Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+            $photo = new Photo();
+            $photo->poster_id = Auth::id();
+            $photo->mime = $file->getclientmimetype();
+            $photo->original_filename = $file->getClientOriginalName();
+            $photo->filename = $file->getFilename().'.'.$extension;
+            $photo->save();
+            $vendor_item->photo_id = $photo->id;
+        }
+        else {
+            $vendor_item->photo_id = null;
+        }
+        $vendor_item->item = $request->item_name;
+        $vendor_item->vendor_id = User::getUserInformationTable(Auth::id())->id;
+        $vendor_item->description = $request->description;
+        $vendor_item->price = $request->price;
+        $vendor_item->price_per = $request->price_per;
+        $vendor_item->farm = $request->farm;
+        if(isset($request->local)) {
+            $vendor_item->local = true;
+        }
+        else {
+            $vendor_item->local = false;
+        }
+        if(isset($request->nongmo)) {
+            $vendor_item->nongmo = true;
+        }
+        else {
+            $vendor_item->nongmo = false;
+        }
+        if(isset($request->organic)) {
+            $vendor_item->organic = true;
+        }
+        else {
+            $vendor_item->organic = false;
+        }
+        $vendor_item->save();
+        return redirect(url('/my_vendor_items'));
+    }
+    public function my_vendor_item($id) {
+        $my_vendor_item = Vendor_Item::find($id);
+        return view('vendor.my_vendor_item')
+            ->with('my_vendor_item', $my_vendor_item);
+    }
+    public function add_time_slot($id) {
+        return view('add_farmers_market_hour');
+    }
+    public function post_add_time_slot(Request $request, $id) {
+        $fmh = new Farmers_Market_Hour;
+        $fmh->farmers_market_id = User::getUserInformationTable(Auth::id())->id;
+        $fmh->day_of_week = $id;
+        $fmh->start_time_hour = $request->start_hour;
+        $fmh->start_time_min = $request->start_min;
+        $fmh->start_time_period = $request->start_period;
+        $fmh->end_time_hour = $request->end_hour;
+        $fmh->end_time_min = $request->end_min;
+        $fmh->end_time_period = $request->end_period;
+        $fmh->save();
+        return redirect(url('/profile'));
+    }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('twitter')->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        try {
+            $user = Socialite::driver('twitter')->user();
+        } catch (Exception $e) {
+            return redirect('auth/twitter');
+        }
+
+        if(Twitter_Info::where('user_id', Auth::id())->count() == 0) {
+           $twitter_info = new Twitter_Info;
+           $twitter_info->user_id = Auth::id();
+           $twitter_info->token = $user->token;
+           $twitter_info->tokenSecret = $user->tokenSecret;
+           $twitter_info->nickname = $user->nickname;
+           $twitter_info->avatar = $user->avatar;
+           $twitter_info->save();
+        }
+        return redirect('/profile');
     }
 }

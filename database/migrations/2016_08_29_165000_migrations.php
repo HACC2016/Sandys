@@ -111,6 +111,14 @@ class Migrations extends Migration
             $table->string('caption');
             $table->timestamps();
         });
+        Schema::create('farmers_market_vendor_maps', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('farmers_market_id')->unsigned();
+            $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
+            $table->integer('photo_id')->unsigned();
+            $table->foreign('photo_id')->references('id')->on('photos');
+            $table->timestamps();
+        });
         Schema::create('follows', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('follower_id')->unsigned();
@@ -138,12 +146,16 @@ class Migrations extends Migration
             $table->increments('id');
             $table->integer('vendor_id')->unsigned();
             $table->foreign('vendor_id')->references('id')->on('vendors');
-            $table->integer('photo_id')->unsigned();
+            $table->integer('photo_id')->unsigned()->nullable();
             $table->foreign('photo_id')->references('id')->on('photos');
             $table->string('item');
             $table->string('description');
             $table->decimal('price', 10, 2);
             $table->integer('price_per');
+            $table->boolean('local');
+            $table->boolean('nongmo');
+            $table->boolean('organic');
+            $table->string('farm');
             $table->timestamps();
         });
         Schema::create('events', function (Blueprint $table) {
@@ -160,6 +172,26 @@ class Migrations extends Migration
             $table->integer('end_year');
             $table->timestamps();
         });
+        Schema::create('vendor_map_positions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('vendor_id')->unsigned();
+            $table->foreign('vendor_id')->references('id')->on('vendors');
+            $table->integer('farmers_market_id')->unsigned();
+            $table->foreign('farmers_market_id')->references('id')->on('farmers_markets');
+            $table->float('left');
+            $table->float('top');
+            $table->timestamps();
+        });
+        Schema::create('twitter_info', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('token');
+            $table->string('tokenSecret');
+            $table->string('nickname');
+            $table->string('avatar');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -171,8 +203,11 @@ class Migrations extends Migration
     {
         Schema::drop('events');
         Schema::drop('farmers_market_hours');
+        Schema::drop('twitter_info');
+        Schema::drop('vendor_map_positions');
         Schema::drop('farmers_market_reviews');
         Schema::drop('farmers_market_vendors');
+        Schema::drop('farmers_market_vendor_maps');
         Schema::drop('follows');
         Schema::drop('post_likes');
         Schema::drop('posts');

@@ -49,6 +49,7 @@ var vue = new Vue({
 						});
 						vue.markers.push(marker);
 						console.log(results[0]);
+						vue.street_address = results[0].formatted_address;
 						vue.state = vue.getState(results[0].address_components);
 						vue.country = vue.getCountry(results[0].address_components);
 						vue.lat = results[0].geometry.location.lat();

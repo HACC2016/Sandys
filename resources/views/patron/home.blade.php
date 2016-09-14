@@ -11,15 +11,22 @@
 
                 <div class="panel-body">
                     <label>What's Going On</label>
+                    @if (count($posts) == 0)
+                        <div class="row" id="">
+                            <div class="col-md-12" id="">
+                                No one posted anything yet.  Either message businesses to post whats going on.  Or follow more people.
+                            </div>
+                        </div>
+                    @endif
                     <ul class="list-group">
                     @foreach ($posts as $post)
                         <li class="list-group-item">
                             @if (App\User::find($post->user_id)->type_account == 1)
-                                <h3><a href="{{url('/farmers_market/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                                <h4><a href="{{url('/farmers_market/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h4>
                             @elseif (App\User::find($post->user_id)->type_account == 2)
-                                <h3><a href="{{url('/patron/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                                <h4><a href="{{url('/patron/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h4>
                             @elseif (App\User::find($post->user_id)->type_account == 2)
-                                <h3><a href="{{url('/vendor/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h3>
+                                <h4><a href="{{url('/vendor/'. App\User::getUserInformationTable($post->user_id)->id)}}">{{App\User::getNameOfUser($post->user_id)}}</a></h4>
                             @endif
                             <p>{{$post->message}}</p>
                             <p>
@@ -57,6 +64,22 @@
                             @endforeach
                         </ul>
                     @endif
+
+                    <label>People You're Following ({{count($follows)}})</label> <a style="padding-left: 10px" href="">View All Follows</a>
+                    <ul class="list-group">
+                    @foreach ($follows as $follow)
+                        <li class="list-group-item">
+                            @if (App\User::find($follow->followed_id)->type_account == 1)
+                                <h4><a href="{{url('/farmers_market/'. App\User::getUserInformationTable($follow->followed_id)->id)}}">{{App\User::getNameOfUser($follow->followed_id)}}</a></h4>
+                            @elseif (App\User::find($follow->followed_id)->type_account == 2)
+                                <h4><a href="{{url('/patron/'. App\User::getUserInformationTable($follow->followed_id)->id)}}">{{App\User::getNameOfUser($follow->followed_id)}}</a></h4>
+                            @elseif (App\User::find($follow->followed_id)->type_account == 2)
+                                <h4><a href="{{url('/vendor/'. App\User::getUserInformationTable($follow->followed_id)->id)}}">{{App\User::getNameOfUser($follow->followed_id)}}</a></h4>
+                            @endif
+                        </li>
+                    @endforeach
+
+                    </ul>
                 </div>
             </div>
         </div>

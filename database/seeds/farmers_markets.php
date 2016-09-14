@@ -27,5 +27,20 @@ class farmers_markets extends Seeder
             'organizer_name' => 'leland lopez',
             'organizer_phone_number' => '1234567',
         ]);
+        DB::table('farmers_markets')->insert([
+            'user_id' => '2',
+            'farmers_market_name' => 'qwer qwer',
+            'street_address' => '920 puku street',
+            'city' => 'Hilo',
+            'zipcode' => '96720',
+            'lat' => '19.90',
+            'lng' => '-155.099217',
+            'county' => 'Hawaii County',
+            'state' => 'Hawaii',
+            'country' => 'United States',
+            'zipcode' => '96720',
+            'organizer_name' => 'leland lopez',
+            'organizer_phone_number' => '1234567',
+        ]);
     }
 }

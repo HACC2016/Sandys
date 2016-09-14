@@ -23,4 +23,24 @@ class Vendor_Item extends Model
      */
     protected $hidden = [
     ];
+
+    public static function getPricePer($i) {
+        switch($i) {
+            case 1:
+                return "Pound";
+                break;
+            case 2:
+                return "Ounce";
+                break;
+            case 3:
+                return "Bag";
+                break;
+            case 4:
+                return "Each";
+                break;
+            default:
+                return "Error";
+                break;
+        }
+    }
 }

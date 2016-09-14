@@ -20,7 +20,7 @@
 								@foreach ($vendors as $vendor)
 									<li class="list-group-item">
 										<?php $v = App\Vendor::find($vendor->vendor_id)?>
-										<p>{{$v->vendor_name}}</p>
+										<h4>{{$v->vendor_name}}</h4>
 										<p>{{$v->vendor_owner_name}}</p>
 										<p>{{$v->vendor_owner_phone}}</p>
 									</li>

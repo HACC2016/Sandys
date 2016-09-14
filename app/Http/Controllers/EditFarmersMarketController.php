@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Farmers_Market_Hour;
 use App\Farmers_Market;
+use App\User;
 class EditFarmersMarketController extends Controller
 {
     public function __construct()
@@ -67,13 +68,14 @@ class EditFarmersMarketController extends Controller
     }
     public function hours()
     {
-        $monday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '1')->get();
-        $tuesday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '2')->get();
-        $wednesday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '3')->get();
-        $thursday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '4')->get();
-        $friday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '5')->get();
-        $saturday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '6')->get();
-        $sunday_hours = Farmers_Market_Hour::where('user_id', $this->user->id)->where('day_of_week', '7')->get();
+        $farmers_market_id = User::getUserInformationTable(Auth::id())->id;
+        $monday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '1')->get();
+        $tuesday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '2')->get();
+        $wednesday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '3')->get();
+        $thursday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '4')->get();
+        $friday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '5')->get();
+        $saturday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '6')->get();
+        $sunday_hours = Farmers_Market_Hour::where('farmers_market_id', $farmers_market_id)->where('day_of_week', '7')->get();
         return view('edit.hours')
             ->with('monday_hours', $monday_hours)
             ->with('tuesday_hours', $tuesday_hours)

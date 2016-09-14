@@ -1,5 +1,3 @@
-
-
 new Vue({
 	el: '#post_photo',
 	data: {

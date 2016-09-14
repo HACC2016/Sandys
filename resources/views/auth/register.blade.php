@@ -6,7 +6,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                Register Farmers Market  <a style="float:right" href="{{url('/register/user')}}"> Opps I Want To Register As A User</a>
+                Register Farmers Market  
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}" id="register">
@@ -197,6 +197,13 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-user"></i> Register
                                 </button>
+                            </div>
+                        </div>
+                        <div class="form-group" id="">
+                            <div class="col-md-6 col-md-offset-4">
+                                <a href="{{url('/register/user')}}"> Opps I Want To Register As A User</a>
+                                <br>
+                                <a href="{{url('/register/vendor')}}"> Opps I Want To Register As A Vendor</a>
                             </div>
                         </div>
                     </form>

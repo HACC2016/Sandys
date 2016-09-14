@@ -4,9 +4,10 @@
 <div id="farmers_market_home">
 <div class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Welcome {{App\User::getNameOfUser(Auth::id())}}
+                <div class="panel-heading">Welcome {{App\User::getNameOfUser(Auth::id())}} 
+                <span style="padding-left: 10px;"><a href="/farmers_market/{{App\User::getUserInformationTable(Auth::id())->id}}">Go To Public Page</a></span>
                 </div>
 
                 <div class="panel-body">
@@ -29,6 +30,7 @@
                             <label>My Vendors ({{count($vendors)}})</label>
                             <a style="padding-left: 10px" href="{{url('/add_vendor')}}">Add A Vendor</a>
                             <a style="padding-left: 10px" href="{{url('/my_vendors')}}">View My Vendors</a>
+                            <a style="padding-left: 10px" href="{{url('/my_vendor_map')}}">View My Vendor Map</a>
 
                         </div>
                     </div>

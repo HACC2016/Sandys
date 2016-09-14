@@ -1,6 +1,7 @@
 var vue = new Vue({
 	el: '#farmers_market',
 	data: {
+		items: [],
 	},
 	ready: function() {
 		console.log(this.lat);
@@ -21,6 +22,20 @@ var vue = new Vue({
 				position: latlng
 			});
 		},
+		itemChanged: function(farmers_market_id) {
+			this.items = [];
+			this.$http.get('/api/farmers_market/1/item/' + this.item_name).then((response) => {
+				this.items = response.data;
+				console.log(this.items.length);
+				for(var i = 0; i < this.items.length; i++) {
+					this.items[i].vendor_name = "asdf";
+					console.log(this.items[i].vendor_name);
+				}
+		          // success callback
+			}, (response) => {
+				// error callback
+			});
+		}
 	}
 })
 

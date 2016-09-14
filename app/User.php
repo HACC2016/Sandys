@@ -41,6 +41,19 @@ class User extends Authenticatable
          }
     }
 
+    public static function getUrlForUser($id) {
+         $user = User::find($id);
+         if($user->type_account == 1) {
+            return "/farmers_market/" . User::getUserInformationTable($id);
+         }
+         elseif($user->type_account == 2) {
+            return "/patron/" . User::getUserInformationTable($id);
+         }
+         elseif($user->type_account == 3) {
+            return "/vendor/" . User::getUserInformationTable($id);
+         }
+    }
+
     public static function getNameOfUser($id) {
          $user = User::find($id);
          if($user->type_account == 1) {
