@@ -17,10 +17,13 @@ use App\Farmers_Market_Vendor;
 use App\Event;
 use App\Farmers_Market_Vendor_Map;
 use App\Twitter_Info;
+use App\Post_Comment;
+use Twitter;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 
 use Socialite;
 
@@ -146,7 +149,7 @@ class HomeController extends Controller
     public function post_post_photo(Request $request) {
         $file = $request->file('thumbnail');
         $extension = $file->getClientOriginalExtension();
-        Storage::disk('local')->put($file->getFilename().'.'.$extension,  File::get($file));
+        Storage::disk('local')->put('/photos/'. $file->getFilename().'.'.$extension,  File::get($file));
         $photo = new Photo();
         $photo->poster_id = Auth::id();
         $photo->mime = $file->getclientmimetype();
@@ -217,6 +220,7 @@ class HomeController extends Controller
         $post->message = $request->message;
         $post->user_id = Auth::id();
         $post->save();
+        $this->post_tweet($post->message);
         return redirect(url('/home'));
     }
 
@@ -457,5 +461,53 @@ class HomeController extends Controller
            $twitter_info->save();
         }
         return redirect('/profile');
+    }
+    public function post_tweet($message) {
+        $twitter_info = Twitter_Info::where('user_id', Auth::id())->first();
+        if($twitter_info) {
+            Twitter::reconfig(['ACCESS_TOKEN' => $twitter_info->token, 'ACCESS_TOKEN_SECRET' => $twitter_info->token_secret]);
+            return Twitter::postTweet(
+                array('status' => $message, 
+                    'format' => 'json')); 
+        }
+    }
+    public function twitterChange() {
+
+    }
+    public function twitterRemove() {
+        
+    }
+    public function post_comment(Request $request, $id) {
+        $pc = new Post_Comment;
+        $pc->user_id = Auth::id();
+        $pc->post_id = $id;
+        $pc->comment = $request->comment;
+        $pc->save();
+        return Redirect::back();
+    }
+    public function remove_vendor($id) {
+        $farmers_market = Farmers_Market::getFarmersMarket(Auth::id());
+        $vendor = Farmers_Market_Vendor::where('farmers_market_id', $farmers_market->id)
+        ->where('vendor_id', $id)
+        ->first();
+        $vendor->delete();
+        return Redirect::back();
+    }
+    public function farmers_market_add_photo($id) {
+        return view('farmers_market.add_photo');
+    }
+    public function post_farmers_market_add_photo(Request $request, $id) {
+        $file = $request->file('thumbnail');
+        $extension = $file->getClientOriginalExtension();
+        Storage::disk('local')->put('/photos/'. $file->getFilename().'.'.$extension,  File::get($file));
+        $photo = new Photo();
+        $photo->poster_id = Auth::id();
+        $photo->for_id = Farmers_Market::find($id)->user_id;
+        $photo->mime = $file->getclientmimetype();
+        $photo->original_filename = $file->getClientOriginalName();
+        $photo->filename = $file->getFilename().'.'.$extension;
+        $photo->caption = $request->caption;
+        $photo->save();
+        return redirect(url('/farmers_market/' . $id));
     }
 }

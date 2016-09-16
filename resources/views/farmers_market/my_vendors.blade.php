@@ -5,6 +5,15 @@
 	.no-gutter > [class*='col-'] {
 		padding-left:0;
 	}
+	.no_spacing {
+		margin: 0px;
+		padding: 0px;
+	}
+	.list_header {
+		font-size: 20px;
+		margin: 0px;
+		padding-bottom: 5px;
+	}
 </style>
 <div id="add_vendor"> <!-- vue container -->
 	<div class="container">
@@ -19,10 +28,22 @@
 								<ul class="list-group">
 								@foreach ($vendors as $vendor)
 									<li class="list-group-item">
-										<?php $v = App\Vendor::find($vendor->vendor_id)?>
-										<h4>{{$v->vendor_name}}</h4>
-										<p>{{$v->vendor_owner_name}}</p>
-										<p>{{$v->vendor_owner_phone}}</p>
+										<div class="row">
+											<div class="col-md-9" id="">
+												<?php $v = App\Vendor::find($vendor->vendor_id)?>
+												<p class="list_header">{{$v->vendor_name}}</p>
+												<p class="no_spacing">Owner: {{$v->vendor_owner_name}}</p>
+												<p class="no_spacing">
+												<i class="fa fa-phone" aria-hidden="true"></i>
+												<span style="padding-left: 2px">
+												{{$v->vendor_owner_phone}}
+												</span>
+												</p>
+											</div>
+											<div class="col-md-3" id="">
+												<a href="/remove_vendor/{{$v->id}}" class="btn btn-default pull-right">Remove</a>
+											</div>
+										</div>
 									</li>
 								@endforeach
 								</ul>

@@ -22,6 +22,13 @@
 	.no_margin {
 		margin: 0px;
 	}
+	.nospacing {
+		margin: 0px;
+		padding: 0px;
+	}
+	.padding_left {
+		padding-left: 5px;
+	}
 </style>
 <div id="farmers_market"> <!-- vue container -->
 <input type="hidden" v-model="lat" value="{{$farmers_market->lat}}">
@@ -37,7 +44,37 @@
 									<li class="list-group-item">
 										<div class="row" id="">
 											<div class="col-md-3" id="">
-												<div id="map" style="width: 100%; height: 200px;"></div>
+												<div class="row" id="">
+													<div class="col-md-12" id="">
+														<div id="map" style="width: 100%; height: 200px;"></div>
+													</div>
+												</div>
+												<div class="row" id="" style="padding-top: 10px;">
+													<div class="col-md-12" id="">
+														<ul class="list-group">
+															<li class="list-group-item li_header">
+																<label>Photos ({{$photo_count}})</label>
+																<a class="padding_left" href="/farmers_market/{{$farmers_market->id}}/photos">
+																	View All	
+																</a>
+															</li>
+															<li class="list-group-item clearfix">
+								                                <div class="col-md-3" id="">
+								                                    <img src="{{route('getentry', 'phpPLEbp8.jpeg')}}" alt="ALT NAME" class="img-responsive" />
+								                                </div>
+								                                <div class="col-md-3" id="">
+								                                    <img src="{{route('getentry', 'phpPLEbp8.jpeg')}}" alt="ALT NAME" class="img-responsive" />
+								                                </div>
+								                                <div class="col-md-3" id="">
+								                                    <img src="{{route('getentry', 'phpPLEbp8.jpeg')}}" alt="ALT NAME" class="img-responsive" />
+								                                </div>
+								                                <div class="col-md-3" id="">
+								                                    <img src="{{route('getentry', 'phpPLEbp8.jpeg')}}" alt="ALT NAME" class="img-responsive" />
+								                                </div>
+															</li>
+														</ul>
+													</div>
+												</div>
 											</div>
 											
 											<div class="col-md-5" id="">
@@ -56,12 +93,12 @@
 												<p><a href="">Get Directions</p>
 												<div style="padding-top: 10px;">
 												<a href="/vendor/{{$farmers_market->id}}/review" class="btn btn-default"><i class="fa fa-pencil-square fa-lg"></i><span style="padding-left: 5px;">Write A Review</span></a>
-												<a href="" class="btn btn-default"><i class="fa fa-camera-retro fa-lg"></i><span style="padding-left: 5px;">Add A Photo</span></a>	
+												<a href="/farmers_market/{{$farmers_market->id}}/add_photo" class="btn btn-default"><i class="fa fa-camera-retro fa-lg"></i><span style="padding-left: 5px;">Add A Photo</span></a>	
 												@if (Auth::check())
 													@if (App\Follow::where('follower_id', Auth::id())->where('followed_id', $farmers_market->user_id)->count() == 0)
 														<a href="{{url('/follow/'.$farmers_market->user_id)}}" class="btn btn-default"><i class="fa fa-check-square" aria-hidden="true"></i><span style="padding-left:5px">Follow</span></a>
 													@else
-														<a href="{{url('/unfollow/'.$farmers_market->user_id)}}" class="btn btn-default"><i class="fa fa-check-square" aria-hidden="true"></i><span style="padding-left:5px">UnFollow</span></a>
+														<a href="{{url('/unfollow/'.$farmers_market->user_id)}}" class="btn btn-default" style="background-color: #79d2a6;"><i class="fa fa-check-square" aria-hidden="true"></i><span style="padding-left:5px">UnFollow</span></a>
 													@endif
 												@endif
 												</div>
@@ -74,6 +111,7 @@
 														Schedule
 													</li>
 													<li class="list-group-item">
+														@if(count($monday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -110,6 +148,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($tuesday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -146,6 +186,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($wednesday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -182,6 +224,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($thursday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -218,6 +262,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($friday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -254,6 +300,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($saturday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -290,6 +338,8 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(count($sunday_hours))
 														<p>
 														<div class="row">
 															<div class="col-md-4">
@@ -326,6 +376,16 @@
 															</div>
 														</div>
 														</p>
+														@endif
+														@if(!(count($monday_hours) or 
+															count($tuesday_hours) or
+															count($wednesday_hours) or
+															count($thursday_hours) or
+															count($friday_hours) or
+															count($saturday_hours) or
+															count($sunday_hours)))
+														No hours have been listed.  Contact the farmers market and tell them to update their Hours.
+														@endif
 													</li>
 												</ul>
 												
@@ -337,118 +397,156 @@
 									
 							</div>
 						</div>
-						<div class="row" id="">
-							<div class="panel panel-default vendor_panel" id="" >
-								<div class="panel-heading" style="padding: 10px; padding-bottom: 5px">
-									<label>Reviews ({{count($farmers_market_reviews)}})</label><a style="padding-left: 10px" href="/vendor/{{$farmers_market->id}}/reviews">View All Reviews</a>
-								</div>
-								<div class="panel-body" id="" style="padding: 0px; padding-top: 15px; padding-bottom: 15px;">
-									<div class="col-md-6" id="">
-										<ul class="list-group" style="margin-bottom: 10px; max-height: 340px; overflow: auto">
-											@if (count($farmers_market_reviews) == 0)
-											<li class="list-group-item">
-												<a href="">No Reviews are available.  Click here to add a new review</a>
-											</li>
-											@else
-												@foreach($farmers_market_reviews as $farmers_market_review)
-													<li class="list-group-item" style="padding: 10px;">
-														<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</a></h4>
-						                                <p>{{$farmers_market_review->review}}</p>
-						                                <p style="margin-bottom: 0px">Rating: {{$farmers_market_review->rating}}/5</p>
-													</li>
-												@endforeach
-											@endif
-										</ul>
-										<a href="{{url('/farmers_market/' . $farmers_market->id. '/review')}}" class="btn btn-default btn-sm form-control">Add A Review</a>
-									</div>
-									<div class="col-md-6" id="">
-										<h3>Average Rating: {{$average_rating}}</h3>
-										@if(count($farmers_market_reviews) != 0)
-										<div class="row">
-											<div class="col-md-12">
-												<label>Highest Rated Review</label>
-												<ul class="list-group">
-													<li class="list-group-item" style="padding: 10px;">
-														<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($highest_review->reviewer_id)}}</a></h4>
-						                                <p>{{$highest_review->review}}</p>
-						                                <p style="margin-bottom: 0px">Rating: {{$highest_review->rating}}/5</p>
-													</li>
-												</ul>
-												<label>Lowest Rated Review</label>
-												<ul class="list-group">
-													<li class="list-group-item" style="padding: 10px;">
-														<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($lowest_review->reviewed_id)}}</a></h4>
-						                                <p>{{$lowest_review->review}}</p>
-						                                <p style="margin: 0px">Rating: {{$lowest_review->rating}}/5</p>
-													</li>
-												</ul>
-											</div>
+						<div class="row">
+							<div class="col-md-8" id="">
+								<div class="row" id="">
+									<div class="panel panel-default vendor_panel" id="" style="margin-top:0px">
+										<div class="panel-heading" style="padding: 10px; padding-bottom: 5px">
+											<label>Reviews ({{count($farmers_market_reviews)}})</label><a style="padding-left: 10px" href="/vendor/{{$farmers_market->id}}/reviews">View All Reviews</a>
 										</div>
-										@endif
-									</div>
-										
-								</div>
-							</div>
-						</div>
-						<div class="row" id="" >
-							<div class="col-md-6" id="" style="">
-								<ul class="list-group">
-									<li class="list-group-item li_header">
-										<label>Search Items Being Sold At This Farmers Market ({{count($farmers_market_items)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/vendors">View All Items Being Sold</a>
-									</li>
-									<li class="list-group-item">
-									<input class="form-control" type="text" placeholder="Search For Vendor selling Item" v-on:keyup="itemChanged({{$farmers_market->id}})" v-model="item_name">
-									</li>
-									<div v-for="item in items">
-										<li class="list-group-item">
-											<div class="row">
-												<div class="col-md-6" id="">
-													<h4 style="margin: 0px;">
-													@{{item.item}}
-													</h4>
-													<p style="margin: 0px; padding: 0px;">
-													@{{item.description}}
-													</p style="margin: 0px; padding: 0px;">
-													<a href="/vendor/@{{item.vendor_id}}">@{{item.vendor_name}}</a>
-												</div>
-												<div class="col-md-6" id="">
-													<a href="">Locate Vendor On Vendor Map</a>
-												</div>
+										<div class="panel-body" id="" style="padding: 0px; padding-top: 15px; padding-bottom: 15px;">
+											<div class="col-md-6" id="">
+												<ul class="list-group" style="margin-bottom: 10px; max-height: 340px; overflow: auto">
+													@if (count($farmers_market_reviews) == 0)
+													<li class="list-group-item">
+														<a href="/farmers_market/{{$farmers_market->id}}/review">No Reviews are available.  Click here to add a new review</a>
+													</li>
+													@else
+														@foreach($farmers_market_reviews as $farmers_market_review)
+															<li class="list-group-item" style="padding: 10px;">
+																<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($farmers_market_review->reviewer_id)}}</a></h4>
+								                                <p>{{$farmers_market_review->review}}</p>
+								                                <p style="margin-bottom: 0px">Rating: {{$farmers_market_review->rating}}/5</p>
+															</li>
+														@endforeach
+													@endif
+												</ul>
+												<a href="{{url('/farmers_market/' . $farmers_market->id. '/review')}}" class="btn btn-default btn-sm form-control">Add A Review</a>
 											</div>
-										</li>
+											<div class="col-md-6" id="">
+												<h3>Average Rating: {{$average_rating}}</h3>
+												@if(count($farmers_market_reviews) != 0)
+												<div class="row">
+													<div class="col-md-12">
+														<label>Highest Rated Review</label>
+														<ul class="list-group">
+															<li class="list-group-item" style="padding: 10px;">
+																<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($highest_review->reviewer_id)}}</a></h4>
+								                                <p>{{$highest_review->review}}</p>
+								                                <p style="margin-bottom: 0px">Rating: {{$highest_review->rating}}/5</p>
+															</li>
+														</ul>
+														<label>Lowest Rated Review</label>
+														<ul class="list-group">
+															<li class="list-group-item" style="padding: 10px;">
+																<h4 style="margin-top: 0px"><a href="{{App\User::getUrlForUser($highest_review->reviewer_id)}}">{{App\User::getNameOfUser($lowest_review->reviewed_id)}}</a></h4>
+								                                <p>{{$lowest_review->review}}</p>
+								                                <p style="margin: 0px">Rating: {{$lowest_review->rating}}/5</p>
+															</li>
+														</ul>
+													</div>
+												</div>
+												@endif
+											</div>
+												
+										</div>
 									</div>
-								</ul>
-							</div>
-							<div class="col-md-6" id="" style="">
-								<ul class="list-group">
-									<li class="list-group-item li_header">
-										<label>Vendors ({{count($vendors_id)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/vendors">View All Vendors</a><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/vendor_map">View Vendor Map</a>
-									</li>
-									@foreach ($vendors_id as $vendor_id)
-										<li class="list-group-item">
-										<h4 style="margin: 0px">
-											<a href="{{url('/vendor/'.$vendor_id->id)}}">{{App\Vendor::find($vendor_id->id)->vendor_name}}</a>
-										</h4>
-										</li>
-									@endforeach
-								</ul>
-							</div>
-						</div>
-						
-						<div class="row" id="" >
-							<div class="col-md-12" id="" style="">
-								<ul class="list-group">
-									<li class="list-group-item li_header">
-										<label>Event List ({{count($events)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/events">View All Events</a>
-									</li>
-									@foreach ($events as $event)
-										<li class="list-group-item">
-											<h4 class="no_margin" style="padding-top: 5px; padding-bottom: 5px;">{{$event->event_name}}</h4>
-											<p class="no_margin">{{$event->event_description}}</p>
-											<p class="no_margin">{{$event->event_description}}</p>
-										</li>
-									@endforeach
-								</ul>
+								</div>
+								<div class="row" id="" >
+									<div class="col-md-7" id="" style="">
+										<ul class="list-group">
+											<li class="list-group-item li_header">
+												<label>Search Items Being Sold At Here ({{count($farmers_market_items)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/items">View All</a>
+											</li>
+											<li class="list-group-item">
+											<input class="form-control" type="text" placeholder="Search For Vendor selling Item" v-on:keyup="itemChanged({{$farmers_market->id}})" v-model="item_name">
+											</li>
+											<div v-for="item in items">
+												<li class="list-group-item">
+													<div class="row">
+														<div class="col-md-6" id="">
+															<h4 style="margin: 0px;">
+															@{{item.item}}
+															</h4>
+															<p style="margin: 0px; padding: 0px;">
+															@{{item.description}}
+															</p style="margin: 0px; padding: 0px;">
+															<a href="/vendor/@{{item.vendor_id}}">@{{item.vendor_name}}</a>
+														</div>
+														<div class="col-md-6" id="">
+															<a href="">Locate Vendor On Vendor Map</a>
+														</div>
+													</div>
+												</li>
+											</div>
+										</ul>
+									</div>
+									<div class="col-md-5" id="" style="">
+										<ul class="list-group">
+											<li class="list-group-item li_header">
+												<label>Vendors ({{count($vendors_id)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/vendors">View All</a><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/vendor_map">View Vendor Map</a>
+											</li>
+											@foreach ($vendors_id as $vendor_id)
+												<li class="list-group-item">
+												<h4 style="margin: 0px">
+													<a href="{{url('/vendor/'.$vendor_id->vendor_id)}}">{{App\Vendor::find($vendor_id->vendor_id)->vendor_name}}</a>
+												</h4>
+												</li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+								
+								<div class="row" id="" >
+									<div class="col-md-12" id="" style="">
+										<ul class="list-group">
+											<li class="list-group-item li_header">
+												<label>Event List ({{count($events)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/events">View All Events</a>
+											</li>
+											@foreach ($events as $event)
+												<li class="list-group-item">
+													<h4 class="no_margin" style="padding-top: 5px; padding-bottom: 5px;">{{$event->event_name}}</h4>
+													<p class="no_margin">{{$event->event_description}}</p>
+													<p class="no_margin">
+													{{$event->start_month}}/{{$event->start_day}}/{{$event->start_year}} - 
+													{{$event->end_month}}/{{$event->end_day}}/{{$event->end_year}}
+													</p>
+												</li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
+							</div>		
+							<div class="col-md-4">
+								<div class="row" id="" >
+									<div class="col-md-12" id="" style="">
+										<ul class="list-group">
+											<li class="list-group-item li_header">
+												<label>Recent Posts ({{count($posts)}})</label><a style="padding-left: 10px" href="/farmers_market/{{$farmers_market->id}}/posts">View All Posts</a>
+											</li>
+											@foreach ($posts as $post)
+												<li class="list-group-item">
+													<p class="no_margin" style="font-size: 16px;">
+													<a href="/post/{{$post->id}}">
+													{{$post->message}}
+													</a>
+													</p>
+													<p class="no_margin" style="font-size: 12px; color: #808080;">{{$post->created_at->format('m/d/Y')}}</p>
+													<p class="no_margin">
+													<a href="/post/{{$post->id}}/likes">{{App\Post_Like::where('post_id', $post->id)->count()}}</a>
+													<a href="">
+													<i style="padding-left: 2px;" class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
+													<span style="padding-left: 20px;">
+													<a href="/comments/{{$post->id}}/comments">{{App\Post_Like::where('user_id', $farmers_market->id)->count()}}</a>
+													<a href="">
+													<i style="padding-left: 2px;" class="fa fa-commenting-o" aria-hidden="true" href=""></i></a>
+													</span>
+													</p>
+												</li>
+											@endforeach
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div> 

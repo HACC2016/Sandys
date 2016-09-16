@@ -24,16 +24,13 @@ var vue = new Vue({
 		},
 		itemChanged: function(farmers_market_id) {
 			this.items = [];
-			this.$http.get('/api/farmers_market/1/item/' + this.item_name).then((response) => {
-				this.items = response.data;
-				console.log(this.items.length);
-				for(var i = 0; i < this.items.length; i++) {
-					this.items[i].vendor_name = "asdf";
-					console.log(this.items[i].vendor_name);
-				}
-		          // success callback
+			this.$http.get('/api/farmers_market/' + farmers_market_id + '/items', 
+				{params: {'item_name': vue.item_name}}
+				).then((response) => {
+					console.log(response);
+					this.$set('items', response.data);
 			}, (response) => {
-				// error callback
+				console.log(response);
 			});
 		}
 	}

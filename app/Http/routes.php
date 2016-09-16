@@ -20,6 +20,9 @@ Route::auth();
 
 Route::get('auth/twitter', 'HomeController@redirectToProvider');
 Route::get('auth/twitter/callback', 'HomeController@handleProviderCallback');
+Route::get('auth/twitter/change', 'HomeController@twitterChange');
+Route::get('auth/twitter/remove', 'HomeController@twitterRemove');
+Route::get('post_tweet', 'HomeController@post_tweet');
 
 Route::get('register/farmers_market', 'Auth\AuthController@register_farmers_market');
 Route::post('register', 'Auth\AuthController@register');
@@ -44,6 +47,8 @@ Route::get('/post_photo', 'HomeController@post_photo');
 Route::post('/post_photo', 'HomeController@post_post_photo');
 
 Route::get('/my_photos', 'HomeController@my_photos');
+Route::get('/farmers_market/{id}/add_photo', 'HomeController@farmers_market_add_photo');
+Route::post('/farmers_market/{id}/add_photo', 'HomeController@post_farmers_market_add_photo');
 
 Route::get('/find', 'GuestController@find');
 Route::get('/find/farmers_markets', 'GuestController@find_farmers_markets');
@@ -69,6 +74,7 @@ Route::get('add_post', 'HomeController@add_post');
 Route::post('add_post', 'HomeController@post_add_post');
 Route::get('my_vendor_map', 'HomeController@my_vendor_map');
 Route::post('my_vendor_map', 'HomeController@post_my_vendor_map');
+Route::get('remove_vendor/{id}', 'HomeController@remove_vendor');
 
 Route::get('patron/{id}', 'GuestController@patron');
 
@@ -83,6 +89,11 @@ Route::get('add_time_slot/{day}', 'HomeController@add_time_slot');
 Route::post('add_time_slot/{day}', 'HomeController@post_add_time_slot');
 
 Route::get('farmers_market/{id}/vendor_map', 'GuestController@farmers_market_vendor_map');
+Route::get('farmers_market/{id}/vendors', 'GuestController@farmers_market_vendors');
+Route::get('farmers_market/{id}/items', 'GuestController@farmers_market_items');
+
+Route::get('post/{id}', 'GuestController@post');
+Route::post('post/{id}', 'HomeController@post_comment');
 
 Route::get('add_event', 'HomeController@add_event');
 Route::post('add_event', 'HomeController@post_add_event');
@@ -217,5 +228,32 @@ Route::get('api/getVendorMapPosition/{left}/{top}/{v_id}/{f_id}', function($left
 	$vmp->save();
 });
 
-Route::get('photo/get/{filename}', [
+Route::get('/photo/get/{filename}', [
 	'as' => 'getentry', 'uses' => 'GuestController@get']);
+
+Route::get('/photo/getPhotoByPhotoId/{id}', [
+	'as' => 'asdf', 'uses' => 'GuestController@getPhotoByPhotoId']);
+
+Route::get('api/farmers_market/{id}/items', function(Request $request, $id) {
+	$item_name = $request::get('item_name');
+	$local = $request::get('local');
+	$nongmo = $request::get('nongmo');
+	$organic = $request::get('organic');
+	$vendors = App\Farmers_Market_Vendor::where('farmers_market_id', $id)->get();
+	$items = App\Vendor_Item::orderBy('item', 'asc');
+	for($i = 0; $i < count($vendors); $i++) {
+		$items = $items->orWhere('vendor_id', $vendors[$i]->vendor_id);
+	}
+	if($local == 'true') {
+		$items = $items->where('local', 1);
+	}
+	if($nongmo == 'true') {
+		$items = $items->where('nongmo', 1);
+	}
+	if($organic == 'true') {
+		$items = $items->where('organic', 1);
+	}
+	$items = $items->where('item', 'LIKE', '%'.$item_name.'%');
+	$items = $items->orderBy('price', 'asc');
+	return $items->get();
+});

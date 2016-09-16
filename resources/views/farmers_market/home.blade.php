@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Welcome {{App\User::getNameOfUser(Auth::id())}} 
+                <div class="panel-heading"><label>Welcome {{App\User::getNameOfUser(Auth::id())}} </label>
                 <span style="padding-left: 10px;"><a href="/farmers_market/{{App\User::getUserInformationTable(Auth::id())->id}}">Go To Public Page</a></span>
                 </div>
 
@@ -18,9 +18,9 @@
                             <a style="padding-left: 10px" href="{{url('/my_photos')}}">View All Photos</a>
                             <div class="row">
                             @foreach ($photos as $photo)
-                                    <div class="col-md-3" id="">
-                                        <img src="{{route('getentry', $photo->filename)}}" alt="ALT NAME" class="img-responsive" />
-                                    </div>
+                                <div class="col-md-3" id="">
+                                    <img src="{{route('getentry', $photo->filename)}}" alt="ALT NAME" class="img-responsive" />
+                                </div>
                             @endforeach
                             </div>
                         </div>
@@ -38,6 +38,12 @@
                         <div class="col-md-12">
                             <label>My Followers ({{count($follows)}})</label>
                             <a style="padding-left: 10px" href="{{url('/my_followers')}}">View My Followers</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>My Vendor Request Forms</label>
+                            <a style="padding-left: 10px" href="{{url('/my_vendor_request_forms')}}">View My Vendor Request Forms</a>
                         </div>
                     </div>
                 </div>

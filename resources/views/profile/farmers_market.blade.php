@@ -447,8 +447,8 @@
 								</div>	
 								<div class="col-md-2" style="text-align: right;" id="">
 									@if ($twitter_info)
-										<a href="">Change</a>
-										<a style="padding-left: 10px;" href="">Remove</a>
+										<a href="auth/twitter/change">Change</a>
+										<a style="padding-left: 10px;" href="auth/twitter/remove">Remove</a>
 									@else
 									@endif
 								</div>

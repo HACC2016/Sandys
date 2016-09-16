@@ -36,6 +36,7 @@ class Migrations extends Migration
             $table->string('organizer_name');
             $table->string('organizer_phone_number');
             $table->string('website');
+            $table->string('description');
             $table->timestamps();
         });
         Schema::create('farmers_market_hours', function (Blueprint $table) {
@@ -74,6 +75,7 @@ class Migrations extends Migration
             $table->string('vendor_owner_name');
             $table->string('vendor_owner_phone');
             $table->string('website');
+            $table->string('description');
             $table->timestamps();
         });
         Schema::create('farmers_market_vendors', function (Blueprint $table) {
@@ -99,12 +101,15 @@ class Migrations extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('username');
+            $table->string('description');
             $table->timestamps();
         });
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('poster_id')->unsigned();
             $table->foreign('poster_id')->references('id')->on('users');
+            $table->integer('for_id')->unsigned()->nullable();
+            $table->foreign('for_id')->references('id')->on('users');
             $table->string('filename');
             $table->string('mime');
             $table->string('original_filename');
@@ -192,6 +197,15 @@ class Migrations extends Migration
             $table->string('avatar');
             $table->timestamps();
         });
+        Schema::create('post_comments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('post_id')->unsigned();
+            $table->foreign('post_id')->references('id')->on('posts');
+            $table->string('comment');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -203,6 +217,7 @@ class Migrations extends Migration
     {
         Schema::drop('events');
         Schema::drop('farmers_market_hours');
+        Schema::drop('post_comments');
         Schema::drop('twitter_info');
         Schema::drop('vendor_map_positions');
         Schema::drop('farmers_market_reviews');

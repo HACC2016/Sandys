@@ -148,6 +148,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        Thujohn\Twitter\TwitterServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -157,6 +159,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
 
     ],
 
@@ -205,6 +208,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
+        'Javascript' => Laracasts\Utilities\JavaScript\JavaScript::class,
 
     ],
 

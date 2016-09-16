@@ -15,9 +15,12 @@ use App\Event;
 use App\User;
 use App\DB;
 use App\Photo;
+use App\Post;
+use App\Post_Comment;
 use App\Farmers_Market_Vendor_Map;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use JavaScript;
 
 use App\Http\Requests;
 use Illuminate\Http\Response;
@@ -61,7 +64,7 @@ class GuestController extends Controller
         $vendor_ids = Farmers_Market_Vendor::where('farmers_market_id', $id)->get();
         $items_query = \DB::table('vendor_items');
         for($i = 0; $i < count($vendor_ids); $i++) {
-            $items_query = $items_query->where('vendor_id', $vendor_ids[$i]->vendor_id);
+            $items_query = $items_query->orWhere('vendor_id', $vendor_ids[$i]->vendor_id);
         }
         $events = Event::where('user_id', Farmers_Market::find($id)->user_id)->get();
         $lowest_review = Review::where('reviewed_id', $farmers_market->user_id)
@@ -70,6 +73,7 @@ class GuestController extends Controller
         $highest_review = Review::where('reviewed_id', $farmers_market->user_id)
         ->orderBy('rating', 'desc')
         ->first();
+        $posts = Post::where('user_id', $farmers_market->user_id)->get();
         $monday_hours = Farmers_Market_Hour::where('day_of_week', '1')
             ->where('farmers_market_id', $farmers_market->id)->get();
         $tuesday_hours = Farmers_Market_Hour::where('day_of_week', '2')
@@ -84,8 +88,10 @@ class GuestController extends Controller
             ->where('farmers_market_id', $farmers_market->id)->get();
         $sunday_hours = Farmers_Market_Hour::where('day_of_week', '7')
             ->where('farmers_market_id', $farmers_market->id)->get();
+        $photo_count = Photo::where('poster_id', $id)->orWhere('for_id', $id)->count();
         return view('farmers_market')
             ->with('farmers_market', $farmers_market)
+            ->with('posts', $posts)
             ->with('farmers_market_reviews', $farmers_market_reviews)
             ->with('events', $events)
             ->with('lowest_review', $lowest_review)
@@ -99,6 +105,7 @@ class GuestController extends Controller
             ->with('friday_hours', $friday_hours)
             ->with('saturday_hours', $saturday_hours)
             ->with('sunday_hours', $sunday_hours)
+            ->with('photo_count', $photo_count)
             ->with('vendors_id', $vendor_ids);
     }
     public function farmers_market_review() {
@@ -180,6 +187,12 @@ class GuestController extends Controller
         return (new Response($file, 200))
               ->header('Content-Type', $entry->mime);
     }
+    public function getPhotoByPhotoId($id) {
+        $photo = Photo::find($id);
+        $file = Storage::disk('local')->get('/photos/' . $photo->filename);
+        return (new Response($file, 200))
+              ->header('Content-Type', $photo->mime);
+    }
     public function farmers_market_vendor_map($id) {
         $map = Farmers_Market_Vendor_Map::where('farmers_market_id', $id)->first();
         $photo = null;
@@ -191,5 +204,35 @@ class GuestController extends Controller
             ->with('photo', $photo)
             ->with('vendor_ids', $vendor_ids)
             ->with('id', $id);
+    }
+    public function farmers_market_vendors($id) {
+        $farmers_market = Farmers_Market::find($id);
+        $vendors = Farmers_Market_Vendor::where('farmers_market_id', $id)->get();
+        return view('farmers_market.vendors')
+            ->with('farmers_market', $farmers_market)
+            ->with('vendors', $vendors);
+    }
+    public function post($id) {
+        $post = Post::find($id);
+        $post_comments = Post_Comment::where('post_id', $id)->get();
+        return view('post')
+            ->with('post_comments', $post_comments)
+            ->with('post', $post);
+    }
+    public function farmers_market_items($id) {
+        JavaScript::put([
+            'id' => $id
+        ]);
+
+        $farmers_market = Farmers_Market::find($id);
+        $vendors = Farmers_Market_Vendor::where('farmers_market_id', $id)->get();
+        $items = Vendor_Item::orderBy('item', 'desc');
+        for($i = 0; $i < count($vendors); $i++) {
+            $items->where('vendor_id', $vendors[$i]->vendor_id);
+        }
+        $items = $items->get();
+        return view('farmers_market.items')
+            ->with('farmers_market', $farmers_market)
+            ->with('items', $items);
     }
 }

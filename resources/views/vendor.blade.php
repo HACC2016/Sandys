@@ -147,7 +147,6 @@
 			                                            <div class="row">
 			                                                <div class="col-md-3" id="">
 			                                                	@if($vendor_item->photo_id != null)
-			                                                	{{App\Photo::find($vendor_item->photo_id)->filename}}
 			                                                    <img style="max-height: 200px" src="{{route('getentry', App\Photo::find($vendor_item->photo_id)->filename)}}" alt="ALT NAME" class="img-responsive" />
 			                                                    @endif
 			                                                </div>
