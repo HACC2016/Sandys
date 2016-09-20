@@ -18,6 +18,7 @@ use App\Photo;
 use App\Post;
 use App\Post_Comment;
 use App\Farmers_Market_Vendor_Map;
+use App\Vendor_Map_Position;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use JavaScript;
@@ -234,5 +235,36 @@ class GuestController extends Controller
         return view('farmers_market.items')
             ->with('farmers_market', $farmers_market)
             ->with('items', $items);
+    }
+    public function farmers_market_queried(Request $request) {
+        $island = $request->island;
+        $location = $request->location;
+        $distance = $request->distance;
+        $day = $request->day;
+        $query = Farmers_Market::orderBy('farmers_market_name', 'desc');
+        if($island != null) {
+            $query = $query->where('county', $island);
+        }
+        $fms = $query->get();
+        $fm = $fms->reject(function ($farmers_market) use ($day) {
+            return !Farmers_Market_Hour::where('farmers_market_id', $farmers_market->id)->where('day_of_week', $day)->exists();
+        });
+        $farmers_markets = [];
+        foreach ($fm as $f) {
+            $farmers_markets[] = $f;
+        }
+        return $farmers_markets;
+       
+    }
+
+    public function vendor_information($id) {
+        return view('farmers_market.vendor_information');
+    }
+
+    public function specific_vendor_map($f_id, $v_id) {
+        $marker = Vendor_Map_Position::where('farmers_market_id', '9')->where('vendor_id', '2')->first();
+        return view('specific_vendor_map')
+            ->with('marker', $marker);
+
     }
 }

@@ -92,7 +92,7 @@
 												<p>{{$farmers_market->state}}, {{$farmers_market->state}}, {{$farmers_market->county}}</p>
 												<p><a href="">Get Directions</p>
 												<div style="padding-top: 10px;">
-												<a href="/vendor/{{$farmers_market->id}}/review" class="btn btn-default"><i class="fa fa-pencil-square fa-lg"></i><span style="padding-left: 5px;">Write A Review</span></a>
+												<a href="/farmers_market/{{$farmers_market->id}}/review" class="btn btn-default"><i class="fa fa-pencil-square fa-lg"></i><span style="padding-left: 5px;">Write A Review</span></a>
 												<a href="/farmers_market/{{$farmers_market->id}}/add_photo" class="btn btn-default"><i class="fa fa-camera-retro fa-lg"></i><span style="padding-left: 5px;">Add A Photo</span></a>	
 												@if (Auth::check())
 													@if (App\Follow::where('follower_id', Auth::id())->where('followed_id', $farmers_market->user_id)->count() == 0)
@@ -100,8 +100,12 @@
 													@else
 														<a href="{{url('/unfollow/'.$farmers_market->user_id)}}" class="btn btn-default" style="background-color: #79d2a6;"><i class="fa fa-check-square" aria-hidden="true"></i><span style="padding-left:5px">UnFollow</span></a>
 													@endif
+												@if (App\User::GetUserType(Auth::id()) == 3)
+													<a href="{{url('/vendor_information/'.$farmers_market->user_id)}}" class="btn btn-default" style=""><i class="fa fa-check-square" aria-hidden="true"></i><span style="padding-left:5px">Get Vendor Information</span></a>
+												@endif
 												@endif
 												</div>
+
 											
 												
 											</div>

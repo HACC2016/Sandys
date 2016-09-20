@@ -5,19 +5,32 @@
 	.no-gutter > [class*='col-'] {
 		padding-left:0;
 	}
+	.nospacing {
+		padding: 0px;
+		margin: 0px;
+	}
 </style>
 <div id="find"> <!-- vue container -->
 	<div class="container">
 		<div class="row">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Find Farmers Market and Vendors by Criteria</div>
 					<div class="panel-body">
 						<ul class="list-group">
 							<li class="list-group-item">
-								Search Template		
-								<a class="btn btn-default" v-on:click.stop="islandTemplate">By Island</a>
-								<a class="btn btn-default" v-on:click.stop="distanceTemplate">Distance</a>
+								<div class="row">
+									<div class="col-md-6" id="">
+									Search Template		
+									<a class="btn btn-default" v-on:click.stop="islandTemplate">By Island</a>
+									<a class="btn btn-default" v-on:click.stop="distanceTemplate">Distance</a>
+									</div>
+									<div class="col-md-6" id="">
+									Results Template
+									<a class="btn btn-default" v-on:click.stop="listTemplate">List</a>
+									<a class="btn btn-default" v-on:click.stop="mapTemplate">Map</a>
+									</div>
+								</div>
 							</li>
 						</ul>						
 						<ul class="list-group" v-show="distanceToggle">
@@ -143,13 +156,6 @@
 								</form>
 							</li>
 						</ul>
-						<ul class="list-group">
-							<li class="list-group-item">
-								Results Template
-								<a class="btn btn-default" v-on:click.stop="listTemplate">List</a>
-								<a class="btn btn-default" v-on:click.stop="mapTemplate">Map</a>
-							</li>
-						</ul>
 						<ul class="list-group" v-show="listToggle">
 							<article v-for="farmers_market in farmers_markets">
 								<li class="list-group-item">
@@ -158,16 +164,22 @@
 											@{{farmers_market.farmers_market_name}}
 										</a>
 									</h3>
-									<p>
+									<p class="nospacing">
+										<i class="fa fa-map-marker" aria-hidden="true"></i>
+										<span style="padding-left: 5px;">
 										@{{farmers_market.street_address}}
+										</span>
 									</p>
-									<p>
+									<p class="nospacing">
 										@{{farmers_market.organizer_name}}
 									</p>
-									<p>
+									<p class="nospacing">
+										<i class="fa fa-phone" aria-hidden="true"></i>
+										<span style="padding-left: 5px;">
 										@{{farmers_market.organizer_phone_number}}
+										</span>
 									</p>
-									<p>
+									<p class="nospacing">
 										@{{farmers_market.website}}
 									</p>
 								</li>
@@ -175,7 +187,7 @@
 						</ul>
 						<ul class="list-group" v-show="mapToggle">
 							<li class="list-group-item">
-								<div id="map" style="width: 100%; height: 480px;"></div>
+								<div id="map" style="width: 100%; height: 400px;"></div>
 							</li>
 						</ul>
 					</div> 

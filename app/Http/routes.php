@@ -24,6 +24,9 @@ Route::get('auth/twitter/change', 'HomeController@twitterChange');
 Route::get('auth/twitter/remove', 'HomeController@twitterRemove');
 Route::get('post_tweet', 'HomeController@post_tweet');
 
+Route::get('vendor_information/{id}', 'GuestController@vendor_information');
+Route::get('farmers_market/{f_id}/vendor/{v_id}/vendor_map', 'GuestController@specific_vendor_map');
+
 Route::get('register/farmers_market', 'Auth\AuthController@register_farmers_market');
 Route::post('register', 'Auth\AuthController@register');
 Route::get('register/user', 'Auth\AuthController@register_user');
@@ -135,14 +138,14 @@ Route::get('/unlike_post/{id}', function($id) {
 
 Route::get('/follow/{id}', function($id) {
 	$follow = new App\Follow;
-	$follow->followed_id = App\User::getUserInformationTable($id)->user_id;
+	$follow->followed_id = $id;
 	$follow->follower_id = Auth::id();
 	$follow->save();
 	return Redirect::back();
 });
 
 Route::get('/unfollow/{id}', function($id) {
-	$follow = App\Follow::where('followed_id', App\User::getUserInformationTable($id)->user_id)
+	$follow = App\Follow::where('followed_id', $id)
 	->where('follower_id', Auth::id())
 	->first();
 	$follow->delete();
@@ -170,17 +173,7 @@ Route::get('api/vendor_name/{id}', function($id) {
 	return App\Vendor::find($id);
 });
 
-Route::get('api/farmers_markets/queried', function() {
-	$island = Request::input('island');
-	$location = Request::input('location');
-	$distance = Request::input('distance');
-	$day = Request::input('day');
-	$query = DB::table('farmers_markets');
-	if($island != null) {
-		$query = $query->where('county', $island);
-	}
-	return $query->get();
-});
+Route::get('api/farmers_markets/queried', 'GuestController@farmers_market_queried');
 
 Route::get('api/farmers_markets/getByLocation', function() {
 	$lat = Request::input('lat');

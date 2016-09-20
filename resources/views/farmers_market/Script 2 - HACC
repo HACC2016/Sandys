@@ -1,0 +1,34 @@
+Script 2 - HACC 
+
+INTRO:  Hi, we're Sandy's and we did the Farmer's Market challenge.  The challenge presented was to build an application that helped people find Farmer's Markets easily.  There are over 200 estimated farmer's markets Statewide and 70 markets on Oahu.  As people who enjoy going to Farmer's Markets, we had no idea that so many existed. Having grown up in Hawaii, we understand how important it is to support local businesses.  We want to help Hawaii become more self sustaining and help local farmers reach more local buyers. Our challenge sponsor, Helene, basically said that the sky was the limit in building our application and encouraged us to reach out to organizers and vendors to get any more ideas of what may be helpful.  With that in mind, we set out to build. We believe our application meets the challenge presented and other issues which will be discussed in this video.
+
+A: We built a business search application similar to yelp with a focus on the interaction between Farmer's Markets, Vendors, & their patrons.  We built the application using modern frameworks Laravel & view.
+
+B: Farmer's Market Organizers can register and create an account for their market. They can input the basic information of the market like the days & times they are open and where they are located which will be displayed on their page for patrons to view.  This enables patrons to search for markets based on the day & time they are open or their location.  Searching by the day a market is open will help patrons find markets faster.  Filtering by distance will help patrons know which market is closest.  Search results can be displayed in a list view or map view.  Maps are generated using google maps which means that our maps will be the most up to date.  Also, directions can be given in real time so that patrons can know that they are able to make it to the market on time.
+
+C: Organizers can also post events, pictures, or videos which will be displayed on their page.  Organizers can also link their social media accounts so that any events posted on our appliation will automatically upload to their social media account.
+
+D: Organizers can also list the individual vendors who are a part of their market and, unique to our app, organizers can create a vendor map.  Knowing how to navigate through markets, especially the bigger ones, makes all the difference on those days that you have a million things to do.  
+
+D1: Also, not all signs are created equal and smaller vendors can sometimes be overlooked. Vendor maps help with visibility, allowing each vendor to reach more people.  And, happy vendors will likely continue stay in the market, which then sustains the farmer's market as a whole.
+
+E:Patrons are able to register with our application to create their own account so that they can interact with Farmer's Markets.  Patrons are able to comment, direct message, or post pictures on farmer's markets pages. 
+Organizers will be able to see any comments posted on their page or direct messages sent to them and are able to respond.  This will help organizers gain feedback and know exactly what their patrons want.
+
+F: Patrons can also rate & review farmer's markets.  Organizers and other patrons will be able to see the ratings and read the reviews posted.  This is just another way for organizers to get feedback about their market.
+
+O: Patrons can also follow specific Farmer's markets.  By following a specific farmer's market, they are able to receive notifications of any special events that the farmer's market organizers post.  This is just another avenue for organizers to utilize to advertise their market.
+
+G: Vendors can register and create their own account with features similar to Farmer's Market accounts.  They can receive comments & messages to interact with patrons.  They can post pictures and see pictures posted to their page by other users.  
+
+I:  Vendors are able to list which farmers markets they participate in.  If patrons know a speciic vendor, but don't know how to find them, our app will help connect both vendor and patron.  By listing the farmer's market, our app also helps farmer's markets connect with patrons.
+
+J: On the administrative side, organizers and vendors can request to remove any inappropriate content that is posted to their page.  This is a way to police trolling posts and maintain the integrity of the application. 
+
+K: Our app also serves the new local vendors by helping them find and connect with farmers' market organizers.  Organizers will be able to place their existing forms or create forms allowing vendors to sign up with their market through our app.
+
+L: Vendors can also list the items that they sell.  As an additional search feature unique to our app, patrons can search by items sold.  The search will bring up the vendors who sell the items and the patron can see which farmers market they belong to.  And, if a market has multiple vendors who carry the item, the vendor map will let the patron know exactly where to go in the market to find each vendor. Patrons who like to shop variety before settling on the thing they buy will appreciate the map.  This also facilitates foot traffic throughout the market benefitting the other participating vendors.  Other search criteria that a vendor may indicate and a patron can search for are whether the products are organic, non-gmo,locally grown, and price.
+
+M: Another feature unique to our app is the ability for patrons to reserve items from a specific vendor, pay for the items ahead of time, and pick them up from the vendor at the farmer's market.  The app utilizes Stripe, a secured online payment platform similar to paypal.  This will allows a vendor guaranteed sale at the farmers' market before they even get there.
+
+M: Ultimately, we do not see our application as limited to just farmers markets, but may also include other organized events like local craft fairs.  In Hawaii, community is everything.  Our app helps connect individual people with those communities.  We hope you've enjoyed our submission and thank you for your consideration.

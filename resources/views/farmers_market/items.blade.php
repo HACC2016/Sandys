@@ -26,6 +26,17 @@
 		padding-top: 10px;
 	}
 </style>
+<form action="/charge" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+    data-image="/square-image.png"
+    data-name="Demo Site"
+    data-description="2 widgets ($20.00)"
+    data-amount="2000">
+  </script>
+</form>
 <div id="farmers_market_items"> <!-- vue container -->
 	<div class="container">
 		<div class="row">
@@ -56,7 +67,7 @@
                                         <div class="col-md-3" id="">
                                             <img v-if="item.photo_id" style="max-height: 200px" v-bind:src="'/photo/getPhotoByPhotoId/' + item.photo_id" class="img-responsive" />
                                         </div>
-                                        <div class="col-md-9 item_info" id="">
+                                        <div class="col-md-6 item_info" id="">
 											<h4>@{{item.item}}</h4>
                                             <p>@{{item.description}}</p>
                                             <p>$@{{item.price}} per </p>
@@ -70,8 +81,30 @@
 											<span v-else class="label label-danger">Not Organic</span>
 											</p>
                                         </div>
+                                        <div class="col-md-3">
+	                                        <div>
+	                                        	<a class="btn btn-default" href="">Reserve Item</a>
+                                        	</div>
+                                        	<div style="padding-top: 10px;">
+                                        	<a class="btn btn-default" href="/farmers_market/{{$farmers_market->id}}/vendor/@{{item.vendor_id}}/vendor_map">Find In Map</a>
+                                        	</div>
+                                        	<div style="padding-top: 10px;">
+                                        	<form action="/charge" method="POST">
+												<script
+												src="https://checkout.stripe.com/checkout.js"
+												class="stripe-button"
+												data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+												data-image="/square-image.png"
+												data-name="Demo Site"
+												data-description="2 widgets ($20.00)"
+												data-amount="2000">
+												</script>
+												</form>
+                                        	</div>
+	                                    </div>
                                     </div>
                                 </li>
+                            </li>
 						</ul>
 					</div> 
 				</div>

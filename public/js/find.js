@@ -29,6 +29,7 @@ var vue = new Vue({
 		},
 		onSubmitForm: function() {
 			this.fetchNewFarmersMarkets();
+			console.log('day: ' + this.day);
 		},
 		onSubmitDistanceForm: function() {
 			this.fetchNewFarmersMarketsByDistance();
@@ -40,40 +41,60 @@ var vue = new Vue({
 				paramsarray.push({island: this.island})
 			}
 			if(this.day) {
-				paramsarray.push({island: this.island})
+				paramsarray.push({day: this.day})
 			}
 			if(this.time_hour) {
 			}
-			this.$http.get('api/farmers_markets/queried', {params: {island: this.island, day: this.day}}).then((response) => {
-				this.farmers_markets = [];
-				this.farmers_markets = response.data;
+			this.$http.get('/api/farmers_markets/queried', {params: {island: this.island, day: this.day}}).then((response) => {
+				console.log(response);
+				vue.farmers_markets = [];
+				vue.farmers_markets = response.data;
+				console.log(vue.farmers_markets);
+				vue.deleteMarkers();
+				for(var i = 0;  i < vue.farmers_markets.length;  i++) { 
+					console.log(i);
+					var contentString = '<div id="content">'+
+		            '<div id="siteNotice">'+
+		            '</div>'+
+		            '<h4 id="firstHeading" class="firstHeading">' + 
+		            '<a href="/farmers_market/' + vue.farmers_markets[i].id + '">' + vue.farmers_markets[i].farmers_market_name + '</a>'+
+		            '</h4>' + 
+		            '<p style="padding: 0px; margin: 0px"><i class="fa fa-map-marker" aria-hidden="true"></i>' +
+		            '<span style="padding: 5px;">' + vue.farmers_markets[i].street_address + '</span></p>' + 
+					'<p style="padding: 0px; margin: 0px">' +  vue.farmers_markets[i].organizer_name  + '</p>' + 
+					'<p style="padding: 0px; margin: 0px"><i class="fa fa-phone" aria-hidden="true"></i>' +  
+					'<span style="padding: 5px;">' + vue.farmers_markets[i].organizer_phone_number  + '</span></p>' +
+					'<p style="padding: 0px; margin: 0px">' +  vue.farmers_markets[i].website  + '</p>' + 
+		            '</h3>'+
+		            '</div>'+
+		            '</div>';
+
+					var infowindow = new google.maps.InfoWindow({
+			          content: contentString
+			        });
+					var latlng = new google.maps.LatLng(vue.farmers_markets[i].lat, vue.farmers_markets[i].lng);
+					var marker = new google.maps.Marker({
+						map: vue.map,
+						position: latlng
+					});
+					this.bindInfoWindow(marker, vue.map, infowindow);
+					vue.markers.push(marker);
+				}
+				console.log(this.markers);
+				//this.map.setCenter(this.findMiddleOfCoordinates(this.markers));
+				var bounds = new google.maps.LatLngBounds();
+				for (var i = 0; i < this.markers.length; i++) {
+					bounds.extend(this.markers[i].getPosition());
+				}
+				this.map.fitBounds(bounds);
+				if(this.map.getZoom() > 10) {
+					this.map.setZoom(11);
+				}
 			}, (response) => {
 				console.log("error");
 			});
 
-			this.deleteMarkers();
-			for(var i = 0;  i < this.farmers_markets.length;  i++) { 
-				var contentString = '<div id="content">'+
-	            '<div id="siteNotice">'+
-	            '</div>'+
-	            '<h3 id="firstHeading" class="firstHeading">' + 
-	            '<a href="/farmers_market/' + vue.farmers_markets[i].id + '">' + vue.farmers_markets[i].farmers_market_name + '</a>'+
-	            '</h3>'+
-	            '</div>'+
-	            '</div>';
-
-				var infowindow = new google.maps.InfoWindow({
-		          content: contentString
-		        });
-				var latlng = new google.maps.LatLng(vue.farmers_markets[i].lat, vue.farmers_markets[i].lng);
-				var marker = new google.maps.Marker({
-					map: this.map,
-					position: latlng
-				});
-				this.bindInfoWindow(marker, this.map, infowindow);
-				vue.markers.push(marker);
-			}
-			this.map.setCenter(this.findMiddleOfCoordinates(this.markers));
+			
 		},
 		bindInfoWindow: function(marker, map, infowindow) {
 		    marker.addListener('click', function() {
@@ -94,7 +115,6 @@ var vue = new Vue({
 			this.infoWindows = [];
 		},
 		listTemplate: function() {
-			console.log('list')
 			this.listToggle = true;
 			this.mapToggle = false;
 		},
@@ -179,7 +199,6 @@ var vue = new Vue({
 			var x= 0;
 			var y= 0;
 			var z= 0;
-			console.log(markers.length);
 			for(var i = 0; i < markers.length; i++){ 
 				var lat = markers[i].getPosition().lat() * Math.PI /180;
 				var lng = markers[i].getPosition().lng() * Math.PI /180;
@@ -187,19 +206,20 @@ var vue = new Vue({
 				x += Math.cos(lat) * Math.cos(lng);
 	            y += Math.cos(lat) * Math.sin(lng);
 	            z += Math.sin(lat);
+	        }
 
-				var total = markers.length;
+			var total = markers.length;
+			console.log(total);
 
-		        x = x / total;
-		        y = y / total;
-		        z = z / total;
+	        x = x / total;
+	        y = y / total;
+	        z = z / total;
 
-		        var centralLongitude = Math.atan2(y, x);
-		        var centralSquareRoot = Math.sqrt(x * x + y * y);
-		        var centralLatitude = Math.atan2(z, centralSquareRoot);
+	        var centralLongitude = Math.atan2(y, x);
+	        var centralSquareRoot = Math.sqrt(x * x + y * y);
+	        var centralLatitude = Math.atan2(z, centralSquareRoot);
 
-		        return new google.maps.LatLng(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
-			}
+	        return new google.maps.LatLng(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
 		}
 	}
 })

@@ -28,6 +28,13 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public static function getUserType($id) {
+        $user = User::find($id);
+        if(Vendor::where('user_id', $user->id)->count() > 0) {
+            return 3;
+        }
+    }
+
     public static function getUserInformationTable($id) {
          $user = User::find($id);
          if($user->type_account == 1) {

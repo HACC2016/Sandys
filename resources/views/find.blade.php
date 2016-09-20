@@ -101,6 +101,7 @@
 									<div class="form-group" >
 										<label for="exampleInputEmail1">Open On What Day</label>
 										<select class="form-control" v-model="day">
+											<option value="0" @if ($day=="Any") echo selected @endif>Monday</option>
 											<option value="1" @if ($day=="Mon") echo selected @endif>Monday</option>
 											<option value="2" @if ($day=="Tue") echo selected @endif>Tuesday</option>
 											<option value="3" @if ($day=="Wed") echo selected @endif >Wednesday</option>

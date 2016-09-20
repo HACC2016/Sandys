@@ -67,9 +67,19 @@ class HomeController extends Controller
             $follows = Follow::where('follower_id', Auth::id())->get();
             $posts = Post::orderBy('created_at');
             for($i = 0; $i < count($follows); $i++) {
-                $posts = $posts->orWhere('user_id', $follows[$i]->followed_id);
+                if($i == 0) {
+                    $posts = $posts->where('user_id', $follows[$i]->followed_id);
+                }
+                else {
+                    $posts = $posts->orWhere('user_id', $follows[$i]->followed_id);
+                }
             }
-            $posts = $posts->get();
+            if(count($follows)!= 0) {
+                $posts = $posts->get();
+            }
+            else {
+                $posts = [];
+            }
             $my_reviews = Review::where('reviewer_id', Auth::id())->get();
             return view('patron.home')
                 ->with('posts', $posts)
